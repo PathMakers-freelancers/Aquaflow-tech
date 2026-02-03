@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - AquaFlow Tech</title>
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script>
+        // Fallback if primary CDN fails
+        if (typeof Chart === 'undefined') {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"><\/script>');
+        }
+    </script>
+    <style>
+        .admin-dashboard-container {
+            padding-top: calc(var(--navbar-height) + 2rem);
+            padding-bottom: 2rem;
+            min-height: 100vh;
+            background: var(--bg-primary);
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+        }
+
+        [data-theme="dark"] .chart-card {
+            background: var(--bg-secondary);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">
+                <span class="brand-logo-box"></span><span class="brand-text">AquaFlow Tech</span>
+            </a>
+            <ul class="navbar-menu">
+                <li class="navbar-item has-dropdown">
+                    <a class="navbar-link">
+                        Home <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="index.html" class="dropdown-item">Home 1</a></li>
+                        <li><a href="home2.html" class="dropdown-item">Home 2</a></li>
+                    </ul>
+                </li>
+                <li class="navbar-item">
+                    <a href="about.html" class="navbar-link">About Us</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="services.html" class="navbar-link">Services</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="contact.html" class="navbar-link">Contact</a>
+                </li>
+                <li class="navbar-item has-dropdown">
+                    <a class="navbar-link">
+                        Dashboard <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="user-dashboard.html" class="dropdown-item">User Dashboard</a></li>
+                        <li><a href="admin-dashboard.html" class="dropdown-item">Admin Dashboard</a></li>
+                    </ul>
+                </li>
+                <li class="navbar-item">
+                    <a href="login.html" class="navbar-link">Login</a>
+                </li>
+                <!-- Mobile Only Controls inside Menu -->
+                <div class="mobile-menu-controls">
+                    <button class="theme-toggle" title="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="rtl-toggle" title="Toggle RTL"><i class="fas fa-globe"></i></button>
+                </div>
+            </ul>
+            <div class="navbar-controls">
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container admin-dashboard-container">
+        <div class="section-header">
+            <h2 class="section-title">Admin <span class="gradient-text">Dashboard</span></h2>
+            <p class="section-subtitle">Real-time System Analytics & Performance Indicators</p>
+        </div>
+
+        <div class="chart-grid" id="charts-area">
+            <!-- Charts will be injected here via JS -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+    <script src="rtltoggle.js"></script>
+    <script>
+        // Wait for window load to ensure all resources are ready
+        window.addEventListener('load', function () {
+            const chartGrid = document.getElementById('charts-area');
+
+            // Show loading state
+            chartGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 2rem;"><i class="fas fa-spinner fa-spin"></i> Loading charts...</p>';
+
+            // Define 20 Distinct Chart Configurations with Plumbing Data
+            const chartsConfig = [
+                {
+                    title: "Monthly Revenue Trend",
+                    type: "line",
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    data: [12000, 19000, 15000, 25000, 22000, 30000],
+                    colors: ['rgba(75, 192, 192, 0.6)'],
+                    borderColors: ['rgba(75, 192, 192, 1)'],
+                    label: "Revenue ($)"
+                },
+                {
+                    title: "Service Type Distribution",
+                    type: "pie",
+                    labels: ['Leak Repair', 'Drain Cleaning', 'Installations', 'Maintenance', 'Emergency'],
+                    data: [30, 25, 20, 15, 10],
+                    colors: [
+                        'rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)', 'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    label: "Requests"
+                },
+                {
+                    title: "Technician Availability",
+                    type: "bar",
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    data: [8, 12, 14, 12, 10, 6, 4],
+                    colors: ['rgba(54, 162, 235, 0.6)'],
+                    label: "Active Techs"
+                },
+                {
+                    title: "Customer Satisfaction Metrics",
+                    type: "radar",
+                    labels: ['Punctuality', 'Quality', 'Price', 'Communication', 'Cleanliness'],
+                    data: [4.8, 4.9, 4.2, 4.7, 4.9],
+                    colors: ['rgba(153, 102, 255, 0.5)'],
+                    borderColors: ['rgba(153, 102, 255, 1)'],
+                    label: "Score (out of 5)"
+                },
+                {
+                    title: "Inventory Status (Parts)",
+                    type: "doughnut",
+                    labels: ['Pipes', 'Faucets', 'Connectors', 'Valves', 'Seals'],
+                    data: [500, 200, 800, 300, 600],
+                    colors: [
+                        '#22d3ee', '#0d9488', '#f59e0b', '#ef4444', '#6366f1'
+                    ],
+                    label: "Stock Count"
+                },
+                {
+                    title: "Response Time by Region",
+                    type: "polarArea",
+                    labels: ['North', 'South', 'East', 'West', 'Central'],
+                    data: [25, 40, 15, 30, 20],
+                    colors: [
+                        'rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)'
+                    ],
+                    label: "Minutes"
+                },
+                {
+                    title: "Quarterly Growth",
+                    type: "line",
+                    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                    data: [5, 12, 18, 25],
+                    fill: true,
+                    colors: ['rgba(34, 197, 94, 0.2)'],
+                    borderColors: ['#22c55e'],
+                    label: "Growth %"
+                },
+                {
+                    title: "Top Performing Technicians",
+                    type: "bar",
+                    labels: ['Alex', 'Sam', 'Jordan', 'Casey', 'Jamie'],
+                    indexAxis: 'y', // Horizontal Bar
+                    data: [95, 88, 92, 85, 90],
+                    colors: ['rgba(244, 114, 182, 0.7)'],
+                    label: "Jobs Completed"
+                },
+                {
+                    title: "Lead Sources",
+                    type: "pie",
+                    labels: ['Website', 'Referral', 'Social Media', 'Ads', 'Direct'],
+                    data: [40, 30, 15, 10, 5],
+                    colors: [
+                        '#60a5fa', '#34d399', '#f472b6', '#fbbf24', '#a78bfa'
+                    ],
+                    label: "Leads"
+                },
+                {
+                    title: "Service Expenses Breakdown",
+                    type: "doughnut",
+                    labels: ['Labor', 'Materials', 'Transport', 'Marketing', 'Overhead'],
+                    data: [45, 30, 10, 10, 5],
+                    colors: [
+                        '#ef4444', '#f97316', '#eab308', '#84cc16', '#06b6d4'
+                    ],
+                    label: "Expense %"
+                },
+                {
+                    title: "Customer Age Demographics",
+                    type: "bar",
+                    labels: ['18-24', '25-34', '35-44', '45-54', '55+'],
+                    data: [10, 35, 30, 15, 10],
+                    colors: ['rgba(124, 58, 237, 0.6)'],
+                    label: "Percentage"
+                },
+                {
+                    title: "Skill Competency Web",
+                    type: "radar",
+                    labels: ['Plumbing', 'Electrical', 'HVAC', 'Customer Service', 'Safety'],
+                    data: [90, 60, 40, 85, 95],
+                    colors: ['rgba(14, 165, 233, 0.4)'],
+                    borderColors: ['#0ea5e9'],
+                    label: "Team Average"
+                },
+                {
+                    title: "Monthly Cancellations",
+                    type: "line",
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    data: [5, 3, 4, 2, 6, 1],
+                    borderColor: '#f43f5e',
+                    backgroundColor: 'rgba(244, 63, 94, 0.1)',
+                    fill: true,
+                    label: "Cancellations"
+                },
+                {
+                    title: "Net Profit Margin",
+                    type: "bar",
+                    labels: ['2020', '2021', '2022', '2023', '2024'],
+                    data: [15, 18, 22, 20, 25],
+                    colors: ['#10b981'],
+                    label: "Margin %"
+                },
+                {
+                    title: "Service Request Priority",
+                    type: "doughnut",
+                    labels: ['Critical', 'High', 'Medium', 'Low'],
+                    data: [10, 25, 40, 25],
+                    colors: ['#dc2626', '#f97316', '#3b82f6', '#22c55e'],
+                    label: "Requests"
+                },
+                {
+                    title: "Average Ticket Value",
+                    type: "line",
+                    labels: ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4'],
+                    data: [150, 180, 165, 210],
+                    borderColor: '#8b5cf6',
+                    tension: 0.1,
+                    label: "Value ($)"
+                },
+                {
+                    title: "Area Coverage Density",
+                    type: "polarArea",
+                    labels: ['Zone A', 'Zone B', 'Zone C', 'Zone D', 'Zone E'],
+                    data: [11, 16, 7, 3, 14],
+                    colors: [
+                        '#ff6384', '#4bc0c0', '#ffcd56', '#45b7d1', '#9966ff'
+                    ],
+                    label: "Active Jobs"
+                },
+                {
+                    title: "Website Traffic",
+                    type: "bar",
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    data: [1200, 1500, 1100, 1700, 1600, 800, 600],
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    label: "Visitors"
+                },
+                {
+                    title: "Customer Retention",
+                    type: "pie",
+                    labels: ['Returning', 'One-time'],
+                    data: [65, 35],
+                    colors: ['#059669', '#d1d5db'],
+                    label: "Users"
+                },
+                {
+                    title: "System Uptime",
+                    type: "line",
+                    labels: ['00:00', '06:00', '12:00', '18:00', '24:00'],
+                    data: [100, 99.9, 100, 99.8, 100],
+                    borderColor: '#06b6d4',
+                    stepped: true,
+                    label: "Uptime %"
+                }
+            ];
+
+            // Render Charts with delay to ensure DOM is ready
+            setTimeout(() => {
+                if (typeof Chart === 'undefined') {
+                    console.error('Chart.js not loaded');
+                    chartGrid.innerHTML = '<p class="text-center" style="grid-column: 1/-1; color: red;">Error: Chart.js library failed to load. Please check your internet connection.</p>';
+                    return;
+                }
+
+                // Clear loading state
+                chartGrid.innerHTML = '';
+
+                chartsConfig.forEach((config, index) => {
+                    // Create Card
+                    const card = document.createElement('div');
+                    card.className = 'chart-card';
+                    // Start visible, animate in
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+
+                    const title = document.createElement('h3');
+                    title.textContent = config.title;
+                    title.style.marginBottom = '1rem';
+                    title.style.textAlign = 'center';
+                    title.style.color = 'var(--text-primary)';
+                    title.style.fontSize = '1rem';
+                    title.style.fontWeight = '600';
+
+                    const canvasContainer = document.createElement('div');
+                    canvasContainer.className = 'chart-container';
+                    canvasContainer.style.position = 'relative';
+                    canvasContainer.style.height = '250px';
+                    canvasContainer.style.width = '100%';
+
+                    const canvas = document.createElement('canvas');
+                    canvas.id = `chart-${index}`;
+                    // Explicit size attributes help Chart.js
+                    canvas.width = 400;
+                    canvas.height = 250;
+
+                    canvasContainer.appendChild(canvas);
+                    card.appendChild(title);
+                    card.appendChild(canvasContainer);
+                    chartGrid.appendChild(card);
+
+                    // Ensure the canvas is in DOM before context
+                    const ctx = canvas.getContext('2d');
+
+                    // Helpers for colors
+                    const getVar = (name) => getComputedStyle(document.body).getPropertyValue(name).trim();
+
+                    const chartData = {
+                        labels: config.labels,
+                        datasets: [{
+                            label: config.label || 'Data',
+                            data: config.data,
+                            backgroundColor: config.backgroundColor || config.colors || 'rgba(54, 162, 235, 0.5)',
+                            borderColor: config.borderColor || config.borderColors || 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1,
+                            fill: config.fill || false,
+                            tension: config.tension !== undefined ? config.tension : 0.4,
+                            stepped: config.stepped || false
+                        }]
+                    };
+
+                    // Robust options with default fallbacks
+                    const chartOptions = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: config.indexAxis || 'x',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: getComputedStyle(document.body).getPropertyValue('--text-primary') || '#333'
+                                }
+                            }
+                        },
+                        scales: {
+                            x: config.type === 'pie' || config.type === 'doughnut' || config.type === 'polarArea' || config.type === 'radar' ? { display: false } : {
+                                ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-secondary') || '#666' },
+                                grid: { color: 'rgba(200, 200, 200, 0.1)' }
+                            },
+                            y: config.type === 'pie' || config.type === 'doughnut' || config.type === 'polarArea' || config.type === 'radar' ? { display: false } : {
+                                ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-secondary') || '#666' },
+                                grid: { color: 'rgba(200, 200, 200, 0.1)' }
+                            },
+                            r: { // For Radar/Polar
+                                grid: { color: 'rgba(200, 200, 200, 0.1)' },
+                                pointLabels: { color: getComputedStyle(document.body).getPropertyValue('--text-secondary') || '#666' },
+                                ticks: { backdropColor: 'transparent', display: false }
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        }
+                    };
+
+                    try {
+                        new Chart(ctx, {
+                            type: config.type,
+                            data: chartData,
+                            options: chartOptions
+                        });
+                    } catch (e) {
+                        console.error('Error creating chart:', index, e);
+                        canvasContainer.innerHTML = '<p style="text-align:center; padding-top:2rem; color:red;">Chart Error</p>';
+                    }
+                });
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>

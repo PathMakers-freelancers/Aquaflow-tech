@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaFlow Tech - Home 2</title>
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=2">
+    <!-- Home 2 Specific Styles -->
+    <style>
+        /* Home 2 Unique Theme - Responsive */
+        :root {
+            /* Day Mode: Platinum Tech */
+            --h2-bg: #f8f9fa;
+            /* Crisp White/Gray */
+            --h2-text-primary: #1a1a1a;
+            /* Sharp Black */
+            --h2-text-secondary: #4a5568;
+            /* Cool Gray */
+            --h2-accent-glow: #2563eb;
+            /* Royal Blue */
+            --h2-accent-sec: #06b6d4;
+            /* Cyan */
+            --h2-card-bg: rgba(255, 255, 255, 0.9);
+            --h2-border: rgba(37, 99, 235, 0.2);
+            --h2-grid-color: rgba(37, 99, 235, 0.08);
+            --h2-hero-overlay: radial-gradient(circle at center, transparent 0%, #f8f9fa 100%);
+        }
+
+        /* Night Mode: Midnight Neon */
+        [data-theme="dark"] {
+            --h2-bg: #050505;
+            /* True Dark Void */
+            --h2-text-primary: #ffffff;
+            --h2-text-secondary: #a0a0a0;
+            --h2-accent-glow: #00ff9d;
+            /* Neon Mint */
+            --h2-accent-sec: #ff00ff;
+            /* Neon Magenta */
+            --h2-card-bg: rgba(20, 20, 20, 0.7);
+            --h2-border: rgba(0, 255, 157, 0.4);
+            --h2-grid-color: rgba(0, 255, 157, 0.15);
+            --h2-hero-overlay: radial-gradient(circle at center, transparent 0%, #050505 100%);
+        }
+
+        /* Base Body Style for Home 2 */
+        body {
+            background-color: var(--h2-bg) !important;
+            color: var(--h2-text-primary) !important;
+        }
+
+        /* Hero Animation */
+        .cyber-grid-hero {
+            background: var(--h2-bg);
+            position: relative;
+            overflow: hidden;
+            padding: 8rem 0 4rem;
+            margin-top: 0;
+            transition: background 0.5s ease;
+        }
+
+        .cyber-grid-hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image:
+                linear-gradient(var(--h2-grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--h2-grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg);
+            animation: gridMove 20s linear infinite;
+        }
+
+        .cyber-grid-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--h2-hero-overlay);
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: perspective(500px) rotateX(60deg) translateY(0);
+            }
+
+            100% {
+                transform: perspective(500px) rotateX(60deg) translateY(50px);
+            }
+        }
+
+        .neon-text {
+            color: var(--h2-text-primary);
+            text-shadow: 0 0 5px var(--h2-accent-glow), 0 0 10px var(--h2-accent-glow);
+        }
+
+        /* Home 2 Unique Animations */
+        @keyframes float-h2 {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Home 2 Feature Cards */
+        .home2-feature-card {
+            background: var(--h2-card-bg);
+            /* Glass dark */
+            border: 1px solid var(--h2-border);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .home2-feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--h2-accent-glow);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.15);
+        }
+
+        .home2-feature-card i {
+            background: linear-gradient(135deg, var(--h2-accent-glow), var(--h2-accent-sec));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .home2-feature-card h3 {
+            color: var(--h2-text-primary) !important;
+        }
+
+        .home2-feature-card p {
+            color: var(--h2-text-secondary) !important;
+        }
+
+        /* Process Steps unique style */
+        .process-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            /* Square with radius instead of circle */
+            background: rgba(14, 165, 233, 0.1);
+            border: 1px solid var(--h2-accent-glow);
+            color: var(--h2-accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .process-number::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 16px;
+            border: 1px dashed var(--h2-border);
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .process-content h3 {
+            color: var(--h2-text-primary) !important;
+        }
+
+        .process-content p {
+            color: var(--h2-text-secondary) !important;
+        }
+
+        /* General Card Overrides for H2 */
+        .card {
+            background: var(--h2-card-bg) !important;
+            border: 1px solid var(--h2-border);
+            backdrop-filter: blur(5px);
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            /* Slightly darker/lighter depending on theme for contrast */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: var(--h2-text-primary) !important;
+        }
+
+        .card-text {
+            color: var(--h2-text-secondary) !important;
+        }
+
+        /* Section Backgrounds */
+        .section-alt-h2 {
+            background: rgba(14, 165, 233, 0.03);
+        }
+
+        /* Hero Text Colors (explicit overrides for clarity) */
+        .home2-hero-text h1 {
+            color: var(--h2-text-primary) !important;
+        }
+
+        .home2-hero-text p {
+            color: var(--h2-text-secondary) !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar (Standard) -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">
+                <span class="brand-logo-box"></span><span class="brand-text">AquaFlow Tech</span>
+            </a>
+            <ul class="navbar-menu">
+                <li class="navbar-item has-dropdown">
+                    <a class="navbar-link">
+                        Home <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="index.html" class="dropdown-item">Home 1</a></li>
+                        <li><a href="home2.html" class="dropdown-item">Home 2</a></li>
+                    </ul>
+                </li>
+                <li class="navbar-item">
+                    <a href="about.html" class="navbar-link">About Us</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="services.html" class="navbar-link">Services</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="contact.html" class="navbar-link">Contact</a>
+                </li>
+                <li class="navbar-item has-dropdown">
+                    <a class="navbar-link">
+                        Dashboard <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="user-dashboard.html" class="dropdown-item">User Dashboard</a></li>
+                        <li><a href="admin-dashboard.html" class="dropdown-item">Admin Dashboard</a></li>
+                    </ul>
+                </li>
+                <li class="navbar-item">
+                    <a href="login.html" class="navbar-link">Login</a>
+                </li>
+                <!-- Mobile Only Controls inside Menu -->
+                <div class="mobile-menu-controls">
+                    <button class="theme-toggle" title="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="rtl-toggle" title="Toggle RTL"><i class="fas fa-globe"></i></button>
+                </div>
+            </ul>
+            <div class="navbar-controls">
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- NEW HERO: Cyber Grid Theme -->
+    <section class="cyber-grid-hero">
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="home2-hero-grid">
+                <div style="text-align: left;">
+                    <span style="color: #38bdf8; font-family: monospace; letter-spacing: 0.2em;">SYSTEM_ONLINE //
+                        V.2.0</span>
+                    <h1
+                        style="font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 1rem 0; line-height: 1.1; color: var(--h2-text-primary);">
+                        Digital <span class="neon-text">Plumbing</span> <br> Ecosystem
+                    </h1>
+                    <p
+                        style="font-size: 1.25rem; margin-bottom: 2rem; color: #94a3b8; border-left: 4px solid #0ea5e9; padding-left: 1rem;">
+                        Automated diagnostics. Smart flow control. The future of water infrastructure is here.
+                    </p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn"
+                            style="background: #0ea5e9; color: black; box-shadow: 0 0 20px rgba(14, 165, 233, 0.5); border-radius: 0;">
+                            <i class="fas fa-terminal"></i> Initialize
+                        </button>
+                        <button class="btn"
+                            style="background: transparent; border: 1px solid #38bdf8; color: #38bdf8; border-radius: 0;">
+                            <i class="fas fa-code"></i> View Protocol
+                        </button>
+                    </div>
+                </div>
+                <!-- Hero Image / Visual -->
+                <div class="home2-hero-image" style="background: rgba(15, 23, 42, 0.8); border: 1px solid #0ea5e9;">
+                    <div style="font-family: monospace; color: #22d3ee; text-align: left; padding: 1rem;">
+                        > CONNECTING TO MAINFRAME...<br>
+                        > SUCCESS.<br>
+                        > LOAD_MODULE: SMART_LEAK_DETECT<br>
+                        > 100% COMPLETE<br>
+                        > <span style="animation: blink 1s infinite;">_</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CORE FEATURES -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our <span class="neon-text" style="color:#0ea5e9; text-shadow:none;">Core
+                        Protocols</span></h2>
+                <p class="section-subtitle">Everything you need for perfect plumbing</p>
+            </div>
+            <div class="grid grid-2">
+                <div class="home2-feature-card">
+                    <i class="fas fa-bolt"></i>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--h2-text-primary);">Fast Response
+                    </h3>
+                    <p style="color: var(--text-secondary);">
+                        Our rapid response team arrives within 30 minutes for emergency calls. We value your time.
+                    </p>
+                </div>
+                <div class="home2-feature-card">
+                    <i class="fas fa-award"></i>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--h2-text-primary);">Premium Quality
+                    </h3>
+                    <p style="color: var(--text-secondary);">
+                        We use only the highest quality parts and materials, backed by industry-leading warranties.
+                    </p>
+                </div>
+                <div class="home2-feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--h2-text-primary);">Expert Team
+                    </h3>
+                    <p style="color: var(--text-secondary);">
+                        Our certified technicians have decades of combined experience in residential and commercial
+                        plumbing.
+                    </p>
+                </div>
+                <div class="home2-feature-card">
+                    <i class="fas fa-dollar-sign"></i>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--h2-text-primary);">Fair Pricing
+                    </h3>
+                    <p style="color: var(--text-secondary);">
+                        Transparent, upfront pricing with no hidden fees. You'll know the cost before any work begins.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROCESS TIMELINE -->
+    <section class="section section-alt-h2">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Execution <span style="color:#a855f7;">Process</span></h2>
+                <p class="section-subtitle">Our streamlined 5-step workflow</p>
+            </div>
+            <div class="process-timeline">
+                <div class="process-step">
+                    <div class="process-number">01</div>
+                    <div class="process-content">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--h2-text-primary);">Contact Us
+                        </h3>
+                        <p style="color: var(--text-secondary);">Call, email, or use our online booking system to
+                            describe your plumbing needs.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">02</div>
+                    <div class="process-content">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--h2-text-primary);">Quick
+                            Dispatch</h3>
+                        <p style="color: var(--text-secondary);">We immediately dispatch our nearest qualified
+                            technician to your location.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">03</div>
+                    <div class="process-content">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--h2-text-primary);">Diagnosis &
+                            Quote</h3>
+                        <p style="color: var(--text-secondary);">Our expert assesses the issue and provides a detailed,
+                            transparent quote.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">04</div>
+                    <div class="process-content">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--h2-text-primary);">
+                            Professional Repair</h3>
+                        <p style="color: var(--text-secondary);">We complete the work efficiently using quality
+                            materials and proven techniques.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">05</div>
+                    <div class="process-content">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--h2-text-primary);">Quality
+                            Check</h3>
+                        <p style="color: var(--text-secondary);">Final inspection and cleanup to ensure everything is
+                            perfect before we leave.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Service <span style="color:#0ea5e9;">Modules</span></h2>
+                <p class="section-subtitle">Comprehensive plumbing solutions</p>
+            </div>
+            <div class="grid grid-3">
+                <div class="card">
+                    <div
+                        style="height: 180px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-wrench" style="font-size: 3rem; color: #a855f7;"></i>
+                    </div>
+                    <h3 class="card-title" style="color: var(--h2-text-primary);">Emergency Repairs</h3>
+                    <p class="card-text" style="color: var(--text-secondary);">24/7 emergency repair services for burst
+                        pipes, major leaks, and urgent issues.</p>
+                    <button class="btn btn-outline"
+                        style="border-color: #0ea5e9; color: #0ea5e9; width: 100%; margin-top: 1rem;">Access
+                        Module</button>
+                </div>
+                <div class="card">
+                    <div
+                        style="height: 180px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-tools" style="font-size: 3rem; color: #0ea5e9;"></i>
+                    </div>
+                    <h3 class="card-title" style="color: var(--h2-text-primary);">Installation</h3>
+                    <p class="card-text" style="color: var(--text-secondary);">Professional installation of fixtures,
+                        water heaters, sinks, and complete systems.</p>
+                    <button class="btn btn-outline"
+                        style="border-color: #0ea5e9; color: #0ea5e9; width: 100%; margin-top: 1rem;">Access
+                        Module</button>
+                </div>
+                <div class="card">
+                    <div
+                        style="height: 180px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-clipboard-check" style="font-size: 3rem; color: #f472b6;"></i>
+                    </div>
+                    <h3 class="card-title" style="color: var(--h2-text-primary);">Maintenance</h3>
+                    <p class="card-text" style="color: var(--text-secondary);">Regular maintenance programs to prevent
+                        issues and extend system life.</p>
+                    <button class="btn btn-outline"
+                        style="border-color: #0ea5e9; color: #0ea5e9; width: 100%; margin-top: 1rem;">Access
+                        Module</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="section section-alt-h2">
+        <div class="container">
+            <div class="grid grid-4">
+                <div class="home2-feature-card" style="text-align: center; padding: 1.5rem;">
+                    <div style="font-size: 2.5rem; font-weight: 800; color: #0ea5e9;">2500+</div>
+                    <div style="color: #94a3b8;">Projects Completed</div>
+                </div>
+                <div class="home2-feature-card" style="text-align: center; padding: 1.5rem;">
+                    <div style="font-size: 2.5rem; font-weight: 800; color: #a855f7;">100%</div>
+                    <div style="color: #94a3b8;">Satisfaction</div>
+                </div>
+                <div class="home2-feature-card" style="text-align: center; padding: 1.5rem;">
+                    <div style="font-size: 2.5rem; font-weight: 800; color: #f472b6;">20+</div>
+                    <div style="color: #94a3b8;">Years Experience</div>
+                </div>
+                <div class="home2-feature-card" style="text-align: center; padding: 1.5rem;">
+                    <div style="font-size: 2.5rem; font-weight: 800; color: #22c55e;">30m</div>
+                    <div style="color: #94a3b8;">Avg Response</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SMART TECH -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Smart <span style="color:#a855f7;">Integration</span></h2>
+                <p class="section-subtitle">Next-gen IoT Solutions</p>
+            </div>
+            <div class="grid grid-2">
+                <div class="card" style="border-left: 4px solid #0ea5e9;">
+                    <h3 style="color: var(--h2-text-primary); font-size: 1.5rem;">Smart Home Sync</h3>
+                    <p style="color: var(--text-secondary); margin: 1rem 0;">Connect plumbing systems to your smart
+                        home. Monitor usage and detect leaks in real time.</p>
+                    <ul style="list-style: none; padding: 0; color: #94a3b8;">
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-check"
+                                style="color: #0ea5e9; margin-right: 10px;"></i> Leak Alerts</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-check"
+                                style="color: #0ea5e9; margin-right: 10px;"></i> Usage Analytics</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left: 4px solid #a855f7;">
+                    <h3 style="color: var(--h2-text-primary); font-size: 1.5rem;">AI Diagnostics</h3>
+                    <p style="color: var(--text-secondary); margin: 1rem 0;">Predictive maintenance algorithms that
+                        identify potential failures before they happen.</p>
+                    <ul style="list-style: none; padding: 0; color: #94a3b8;">
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-check"
+                                style="color: #a855f7; margin-right: 10px;"></i> Health Monitoring</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-check"
+                                style="color: #a855f7; margin-right: 10px;"></i> Auto-Scheduling</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <!-- ROI CALCULATOR -->
+    <section class="section section-alt-h2">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Investment <span style="color:#0ea5e9;">Calculator</span></h2>
+                <p class="section-subtitle">Calculate your potential savings with Smart AquaFlow Systems</p>
+            </div>
+            <div class="grid grid-2" style="align-items: center;">
+                <div class="card" style="border: 1px solid var(--h2-accent-glow);">
+                    <h3 style="color: var(--h2-text-primary); margin-bottom: 1.5rem;">Input Your Data</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div>
+                            <label
+                                style="display: block; color: var(--h2-text-secondary); margin-bottom: 0.5rem;">Monthly
+                                Water Bill ($)</label>
+                            <input type="number" id="roi-bill" placeholder="e.g. 150"
+                                style="width: 100%; padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--h2-border); background: var(--h2-bg); color: var(--h2-text-primary);">
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; color: var(--h2-text-secondary); margin-bottom: 0.5rem;">Annual
+                                Repair Costs ($)</label>
+                            <input type="number" id="roi-repair" placeholder="e.g. 500"
+                                style="width: 100%; padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--h2-border); background: var(--h2-bg); color: var(--h2-text-primary);">
+                        </div>
+                        <button id="roi-calculate-btn" class="btn"
+                            style="background: var(--h2-accent-glow); color: white; width: 100%; justify-content: center; margin-top: 1rem;">CALCULATE
+                            ROI</button>
+                    </div>
+                </div>
+                <div class="home2-feature-card"
+                    style="text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                    <i class="fas fa-piggy-bank" style="font-size: 4rem; margin-bottom: 2rem;"></i>
+                    <h3 style="color: var(--h2-text-primary); font-size: 1.5rem;">Estimated Annual Savings</h3>
+                    <div id="roi-result" style="font-size: 4rem; font-weight: 800; color: #a855f7; margin: 1rem 0;">$0
+                    </div>
+                    <p style="color: var(--h2-text-secondary);">Based on average efficiency improvements of 30% in water
+                        usage and 50% reduction in emergency repairs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TECH STACK -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">System <span style="color: #a855f7;">Architecture</span></h2>
+                <p class="section-subtitle">Powered by advanced sensors and cloud computing</p>
+            </div>
+            <div class="grid grid-4">
+                <div class="home2-feature-card" style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-wifi"></i>
+                    <h4 style="color: var(--h2-text-primary); margin-bottom: 0.5rem;">IoT Sensors</h4>
+                    <p style="color: var(--h2-text-secondary); font-size: 0.9rem;">Real-time flow & pressure monitoring
+                        nodes.</p>
+                </div>
+                <div class="home2-feature-card" style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-cloud"></i>
+                    <h4 style="color: var(--h2-text-primary); margin-bottom: 0.5rem;">Cloud Core</h4>
+                    <p style="color: var(--h2-text-secondary); font-size: 0.9rem;">Centralized data processing unit.</p>
+                </div>
+                <div class="home2-feature-card" style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-lock"></i>
+                    <h4 style="color: var(--h2-text-primary); margin-bottom: 0.5rem;">Auto-Shutoff</h4>
+                    <p style="color: var(--h2-text-secondary); font-size: 0.9rem;">Instant valve control on leak
+                        detection.</p>
+                </div>
+                <div class="home2-feature-card" style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-chart-pie"></i>
+                    <h4 style="color: var(--h2-text-primary); margin-bottom: 0.5rem;">Analytics</h4>
+                    <p style="color: var(--h2-text-secondary); font-size: 0.9rem;">Usage patterns and prediction
+                        reports.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUSTAINABILITY -->
+    <section class="section section-alt-h2" style="position: relative; overflow: hidden;">
+        <div
+            style="position: absolute; right: -10%; top: 20%; width: 500px; height: 500px; background: var(--h2-accent-glow); opacity: 0.05; border-radius: 50%; filter: blur(50px);">
+        </div>
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="grid grid-2" style="align-items: center; gap: 4rem;">
+                <div>
+                    <h2 class="section-title" style="text-align: left; margin-bottom: 1.5rem;">Eco-Conscious <span
+                            style="color:#22c55e;">Impact</span></h2>
+                    <p
+                        style="color: var(--h2-text-secondary); font-size: 1.1rem; margin-bottom: 2rem; border-left: 4px solid #22c55e; padding-left: 1rem;">
+                        Water Scarcity is a global crisis. Our intelligent systems help you contribute to the solution
+                        by virtually eliminating waste.
+                    </p>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="display: flex; gap: 1rem; margin-bottom: 1rem; align-items: flex-start;">
+                            <div
+                                style="background: rgba(34, 197, 94, 0.1); padding: 0.5rem; border-radius: 0.5rem; color: #22c55e;">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--h2-text-primary);">Reduced Carbon Footprint</h4>
+                                <p style="color: var(--h2-text-secondary); font-size: 0.9rem;">Less water pumped means
+                                    less energy consumed.</p>
+                            </div>
+                        </li>
+                        <li style="display: flex; gap: 1rem; margin-bottom: 1rem; align-items: flex-start;">
+                            <div
+                                style="background: rgba(34, 197, 94, 0.1); padding: 0.5rem; border-radius: 0.5rem; color: #22c55e;">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--h2-text-primary);">Zero-Waste Protocol</h4>
+                                <p style="color: var(--h2-text-secondary); font-size: 0.9rem;">Detecting even
+                                    micro-leaks saves thousands of gallons.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="home2-feature-card" style="border-color: #22c55e; text-align: center;">
+                    <div
+                        style="font-size: 5rem; font-weight: 800; background: linear-gradient(135deg, #22c55e, #0ea5e9); -webkit-background-clip: text; background-clip: text; color: transparent;">
+                        40%</div>
+                    <h3 style="color: var(--h2-text-primary);">Average Reduction</h3>
+                    <p style="color: var(--h2-text-secondary);">In total water consumption for upgraded homes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ENTERPRISE SOLUTIONS -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Enterprise <span style="color:#0ea5e9;">Scale</span></h2>
+                <p class="section-subtitle">Infrastructure solutions for commercial complexes</p>
+            </div>
+            <div class="grid grid-3">
+                <div class="card" style="background: linear-gradient(135deg, #0ea5e9, #2563eb); border: none;">
+                    <h3 style="color: white; margin-bottom: 1rem;">Multi-Unit Management</h3>
+                    <p style="color: rgba(255,255,255,0.9); margin-bottom: 1.5rem;">Control hundreds of units from a
+                        single dashboard. Perfect for property managers.</p>
+                    <button class="btn" style="background: white; color: #2563eb; width: 100%;">Learn More</button>
+                </div>
+                <div class="home2-feature-card">
+                    <h3 style="color: var(--h2-text-primary); margin-bottom: 1rem;">Industrial Grading</h3>
+                    <p style="color: var(--h2-text-secondary);">Sensors capable of handling high-pressure commercial
+                        lines and chemical processing.</p>
+                </div>
+                <div class="home2-feature-card">
+                    <h3 style="color: var(--h2-text-primary); margin-bottom: 1rem;">API Integration</h3>
+                    <p style="color: var(--h2-text-secondary);">Full REST API access to integrate plumbing data into
+                        your existing Building Management Systems.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="padding: 0;">
+        <div class="cta-banner"
+            style="background: linear-gradient(90deg, #0f172a, #1e293b); border-top: 1px solid #334155; border-bottom: 1px solid #334155; border-left: none; border-right: none; margin: 0; border-radius: 0; width: 100%; max-width: 100%;">
+            <div class="container">
+                <h2 style="color: white; margin-bottom: 1rem;">Ready to Upgrade?</h2>
+                <p style="color: #94a3b8; margin-bottom: 2rem;">Join the future of plumbing infrastructure today.</p>
+                <button class="btn" style="background: #0ea5e9; color: black; font-weight: bold;">INITIATE
+                    SERVICE</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3 class="footer-title">AquaFlow Tech</h3>
+                    <p style="color: var(--text-secondary);">Professional plumbing services you can trust. Available
+                        24/7.</p>
+                </div>
+                <div>
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="services.html">Services</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Contact</h4>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone"></i> (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@plumberpro.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 AquaFlow Tech. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script src="rtltoggle.js"></script>
+    <script>
+        // Home 2 Specific Interactive Scripts
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.home2-feature-card, .card');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+
+            // ROI Calculator Logic
+            const calcBtn = document.getElementById('roi-calculate-btn');
+            if (calcBtn) {
+                calcBtn.addEventListener('click', () => {
+                    const bill = parseFloat(document.getElementById('roi-bill').value) || 0;
+                    const repairs = parseFloat(document.getElementById('roi-repair').value) || 0;
+
+                    // Logic: 30% savings on bill + 50% savings on repairs
+                    const savings = (bill * 12 * 0.30) + (repairs * 0.50);
+
+                    // Animate the result
+                    const resultEl = document.getElementById('roi-result');
+                    const targetValue = Math.round(savings);
+
+                    let currentVal = 0;
+                    const increment = targetValue / 20;
+                    const timer = setInterval(() => {
+                        currentVal += increment;
+                        if (currentVal >= targetValue) {
+                            resultEl.textContent = '$' + targetValue.toLocaleString();
+                            clearInterval(timer);
+                        } else {
+                            resultEl.textContent = '$' + Math.floor(currentVal).toLocaleString();
+                        }
+                    }, 30);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

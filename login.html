@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AquaFlow Tech</title>
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Fix Navbar Overlap */
+        .login-container {
+            padding-top: 40px !important;
+            padding-bottom: 40px !important;
+            box-sizing: border-box;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 100vh;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s ease-in-out;
+            overflow-y: auto;
+        }
+
+        /* Ensure register card is fully visible */
+        .login-card {
+            margin-top: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Ensure transitions work with the new positioning */
+        .login-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        .login-container.hidden-left {
+            transform: translateX(-100%);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .login-container.hidden-right {
+            transform: translateX(100%);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Aggressive fix for button text visibility */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            font-weight: 800 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            min-height: 52px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            border: none !important;
+        }
+
+        /* Responsive Toggles Fix */
+        .auth-toggles {
+            position: absolute;
+            top: -3.5rem;
+            right: 0.5rem;
+            display: flex;
+            gap: 0.75rem;
+            z-index: 100;
+        }
+
+        @media (max-width: 480px) {
+            .auth-toggles {
+                top: -2.75rem;
+                right: 0.25rem;
+                gap: 0.5rem;
+            }
+
+            .auth-toggles button {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.85rem !important;
+                border-width: 1px !important;
+            }
+        }
+
+        .btn-primary i,
+        .btn-primary span {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            background: none !important;
+            -webkit-background-clip: border-box !important;
+            background-clip: border-box !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            font-size: 1rem !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Persistent Top-Right Controls -->
+    <div
+        style="position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; align-items: center; gap: 0.75rem; background: var(--bg-primary); padding: 0.4rem 1rem; border-radius: 2rem; border: 1px solid var(--border-color); box-shadow: var(--shadow-md);">
+        <div style="width: 1px; height: 20px; background: var(--border-color); opacity: 0.5; margin-right: 0.25rem;">
+        </div>
+        <button class="theme-toggle" title="Toggle theme">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button class="rtl-toggle" title="Toggle RTL"><i class="fas fa-globe"></i></button>
+    </div>
+
+    <!-- Auth Wrapper -->
+    <div
+        style="position: relative; width: 100%; min-height: 100vh; overflow-x: hidden; display: flex; align-items: center; justify-content: center; background: var(--bg-primary);">
+
+
+
+
+
+        <!-- Login Container -->
+        <div class="login-container active" id="loginContainer"
+            style="position: absolute; width: 100%; display: flex; justify-content: center; transition: all 0.5s ease-in-out;">
+            <div class="animated-bg">
+                <div class="shape"></div>
+                <div class="shape"></div>
+            </div>
+
+            <div style="position: relative; width: 100%; max-width: 450px;">
+                <!-- Toggles Removed From Here (Moved to Hamburger) -->
+
+                <div class="login-card"
+                    style="position: relative; z-index: 10; width: 100%; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 1.5rem; padding: 2.5rem; box-shadow: var(--shadow-xl);">
+                    <!-- Brand Inside Card -->
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <a href="index.html" class="navbar-brand"
+                            style="display: inline-flex; flex-direction: row; align-items: center; gap: 0.75rem; text-decoration: none;">
+                            <span class="brand-logo-box" style="width: 42px; height: 42px; font-size: 1.25rem;"></span>
+                            <span class="brand-text"
+                                style="font-size: 1.5rem; font-weight: 700; white-space: nowrap;">AquaFlow Tech</span>
+                        </a>
+                        <p style="color: var(--text-secondary); margin-top: 0.75rem;">Welcome back! Please login to your
+                            account</p>
+                    </div>
+
+                    <form id="loginForm" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" placeholder="john@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" placeholder="Enter your password" required>
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" style="width: 16px; height: 16px;">
+                                <span style="font-size: 0.875rem; color: var(--text-secondary);">Remember me</span>
+                            </label>
+                            <a href="#" style="font-size: 0.875rem; color: var(--primary); font-weight: 500;">Forgot
+                                password?</a>
+                        </div>
+
+                        <!-- CTA Buttons Aligned -->
+                        <button type="submit" class="btn btn-primary"
+                            style="width: 100%; margin-bottom: 1rem; justify-content: center;">
+                            <i class="fas fa-sign-in-alt"></i> <span>Login</span>
+                        </button>
+
+                        <div class="login-divider" style="margin: 1.5rem 0; text-align: center; position: relative;">
+                            <span
+                                style="background: var(--bg-primary); padding: 0 1rem; color: var(--text-secondary); position: relative; z-index: 1;">OR</span>
+                            <div
+                                style="position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: var(--border-color); z-index: 0;">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <button class="btn btn-outline" style="width: 100%; justify-content: center;">
+                                <i class="fab fa-google"></i> Continue with Google
+                            </button>
+                            <button class="btn btn-outline" style="width: 100%; justify-content: center;">
+                                <i class="fab fa-facebook"></i> Continue with Facebook
+                            </button>
+                        </div>
+                    </form>
+
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <p style="color: var(--text-secondary);">
+                            Don't have an account? <a href="#" onclick="showRegister(event)"
+                                style="color: var(--primary); font-weight: 600;">Register here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Container -->
+        <div class="login-container hidden-left" id="registerContainer"
+            style="position: absolute; width: 100%; display: flex; justify-content: center; transition: all 0.5s ease-in-out; opacity: 0; visibility: hidden; transform: translateX(100%);">
+            <div class="animated-bg">
+                <div class="shape"></div>
+                <div class="shape"></div>
+            </div>
+
+            <div style="position: relative; width: 100%; max-width: 450px;">
+                <!-- Toggles Removed From Here (Moved to Hamburger) -->
+
+                <div class="login-card"
+                    style="position: relative; z-index: 10; width: 100%; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 1.5rem; padding: 2.5rem; box-shadow: var(--shadow-xl);">
+                    <!-- Brand Inside Card -->
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <a href="index.html" class="navbar-brand"
+                            style="display: inline-flex; flex-direction: row; align-items: center; gap: 0.75rem; text-decoration: none;">
+                            <span class="brand-logo-box" style="width: 42px; height: 42px; font-size: 1.25rem;"></span>
+                            <span class="brand-text"
+                                style="font-size: 1.5rem; font-weight: 700; white-space: nowrap;">AquaFlow Tech</span>
+                        </a>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 1.1rem;">Create your
+                            account
+                        </p>
+                    </div>
+
+                    <form id="registerForm" onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" placeholder="john@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" placeholder="(555) 123-4567" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" placeholder="Create a password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" placeholder="Confirm your password" required>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: flex; align-items: start; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" style="width: 16px; height: 16px; margin-top: 0.25rem;" required>
+                                <span style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.4;">
+                                    I agree to the <a href="#" style="color: var(--primary);">Terms of Service</a> and
+                                    <a href="#" style="color: var(--primary);">Privacy Policy</a>
+                                </span>
+                            </label>
+                        </div>
+                        <!-- CTA Buttons Aligned -->
+                        <button type="submit" class="btn btn-primary"
+                            style="width: 100%; margin-bottom: 1.5rem; justify-content: center;">
+                            <i class="fas fa-user-plus"></i> <span>Create Account</span>
+                        </button>
+                    </form>
+
+                    <div style="text-align: center;">
+                        <p style="color: var(--text-secondary);">
+                            Already have an account? <a href="#" onclick="showLogin(event)"
+                                style="color: var(--primary); font-weight: 600;">Login here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="main.js"></script>
+        <script src="rtltoggle.js"></script>
+        <script>
+            // Notification function
+            function showNotification(message, type = 'success') {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'linear-gradient(135deg, #22c55e, #16a34a)' : 'linear-gradient(135deg, #ef4444, #dc2626)'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 0.75rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 10000;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+                font-weight: 600;
+            `;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.animation = 'slideOutRight 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+
+            function handleLogin(event) {
+                event.preventDefault();
+                showNotification('Login successful! Redirecting to dashboard...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'user-dashboard.html';
+                }, 1500);
+            }
+
+            function handleRegister(event) {
+                event.preventDefault();
+                showNotification('Account created successfully! Please login.', 'success');
+                setTimeout(() => {
+                    showLogin(event);
+                }, 1500);
+            }
+
+            function showRegister(event) {
+                if (event) event.preventDefault();
+                const loginContainer = document.getElementById('loginContainer');
+                const registerContainer = document.getElementById('registerContainer');
+
+                // Login slides out to left
+                loginContainer.style.transform = 'translateX(-100%)';
+                loginContainer.style.opacity = '0';
+                loginContainer.style.visibility = 'hidden';
+
+                // Register slides in from right
+                registerContainer.style.transform = 'translateX(0)';
+                registerContainer.style.opacity = '1';
+                registerContainer.style.visibility = 'visible';
+                registerContainer.classList.remove('hidden-left'); // Ensure it's not hidden
+            }
+
+            function showLogin(event) {
+                if (event) event.preventDefault();
+                const loginContainer = document.getElementById('loginContainer');
+                const registerContainer = document.getElementById('registerContainer');
+
+                // Register slides out to right
+                registerContainer.style.transform = 'translateX(100%)';
+                registerContainer.style.opacity = '0';
+                registerContainer.style.visibility = 'hidden';
+
+                // Login slides in from left
+                loginContainer.style.transform = 'translateX(0)';
+                loginContainer.style.opacity = '1';
+                loginContainer.style.visibility = 'visible';
+            }
+
+            // Add animation styles
+            if (!document.getElementById('notificationStyles')) {
+                const style = document.createElement('style');
+                style.id = 'notificationStyles';
+                style.textContent = `
+                @keyframes slideInRight {
+                    from {
+                        transform: translateX(400px);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                @keyframes slideOutRight {
+                    from {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateX(400px);
+                        opacity: 0;
+                    }
+                }
+            `;
+                document.head.appendChild(style);
+            }
+        </script>
+</body>
+
+</html>

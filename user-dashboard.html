@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - AquaFlow Tech</title>
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Mobile Dashboard Styles */
+        @media (max-width: 992px) {
+            .dashboard-container {
+                display: block;
+                padding-top: var(--navbar-height);
+                min-height: 100vh;
+            }
+
+            .dashboard-sidebar {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 85%;
+                max-width: 320px;
+                height: 100vh;
+                background: var(--bg-primary);
+                z-index: 2001;
+                /* Above navbar (2000) */
+                border-right: 1px solid var(--border-color);
+                transition: all 0.3s ease-in-out;
+                overflow-y: auto;
+                padding-bottom: 2rem;
+                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
+                visibility: hidden;
+            }
+
+            .dashboard-sidebar.active {
+                left: 0;
+                visibility: visible;
+            }
+
+            .dashboard-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(4px);
+                z-index: 2000;
+                /* Overlays content and navbar */
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .dashboard-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .mobile-floating-trigger {
+                position: fixed;
+                left: 0;
+                top: 25vh;
+                z-index: 2100;
+                /* Above content, navbar (2000) and sidebar (2001) */
+                transition: all 0.3s ease;
+            }
+
+            .dashboard-main {
+                width: 100%;
+                margin-left: 0;
+                padding: 1.5rem;
+                padding-top: 2rem;
+            }
+
+            .mobile-close {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1.5rem;
+                background: var(--bg-secondary);
+                border-bottom: 1px solid var(--border-color);
+                margin-bottom: 1rem;
+            }
+
+            .mobile-close h3 {
+                font-size: 1.25rem;
+                margin: 0;
+                color: var(--primary);
+                font-weight: 800;
+            }
+
+            .mobile-close button {
+                background: var(--primary);
+                border: none;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+
+            /* Ensure sidebar links are styled on mobile too */
+            .sidebar-nav {
+                list-style: none;
+                padding: 0 1rem;
+            }
+
+            .sidebar-link {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                color: var(--text-secondary);
+                transition: all 0.2s;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+                text-decoration: none;
+            }
+
+            .sidebar-link:hover,
+            .sidebar-link.active {
+                background: var(--bg-secondary);
+                color: var(--primary);
+            }
+
+            .sidebar-section {
+                padding: 0 1rem;
+                margin-top: 1.5rem;
+                margin-bottom: 0.5rem;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: var(--text-secondary);
+                font-weight: 700;
+            }
+
+            /* RTL Mobile Sidebar Support */
+            [dir="rtl"] .dashboard-sidebar {
+                left: auto;
+                right: -100%;
+                border-right: none;
+                border-left: 1px solid var(--border-color);
+            }
+
+            [dir="rtl"] .dashboard-sidebar.active {
+                right: 0;
+                left: auto;
+            }
+
+            [dir="rtl"] .mobile-floating-trigger {
+                left: auto;
+                right: 0;
+                border-radius: 50% 0 0 50% !important;
+            }
+
+            [dir="rtl"] .mobile-floating-trigger i {
+                transform: rotate(180deg);
+            }
+
+            /* Hide desktop-only elements on mobile if needed */
+            .sidebar-toggle-btn {
+                display: none;
+            }
+
+            .mobile-sidebar-controls {
+                display: block !important;
+                margin-top: 2rem;
+                padding: 1.5rem;
+                border-top: 1px solid var(--border-color);
+            }
+        }
+
+        /* Dashboard Layout Fixes for Desktop - Inlined to ensure application */
+        @media (min-width: 993px) {
+
+            .mobile-close,
+            .mobile-floating-trigger,
+            .sidebar-toggle-btn {
+                display: none !important;
+            }
+
+            .dashboard-container {
+                display: flex !important;
+                min-height: 100vh;
+                padding-top: 0;
+                /* REMOVED: var(--navbar-height) to fix gap */
+                position: relative;
+                overflow: visible !important;
+                /* Fix potential cutoff */
+                background: transparent;
+                /* Ensure background matches main content */
+            }
+
+            .dashboard-sidebar {
+                width: 280px;
+                background: var(--bg-primary);
+                border-right: 1px solid var(--border-color);
+                height: calc(100vh - var(--navbar-height));
+                position: fixed;
+                top: var(--navbar-height);
+                left: 0;
+                overflow-y: auto;
+                z-index: 100;
+                padding-bottom: 2rem;
+                transform: none !important;
+                /* Ensure it's not hidden */
+                visibility: visible !important;
+            }
+
+            .dashboard-main {
+                flex: 1;
+                margin-left: 280px !important;
+                /* Width of sidebar */
+                padding: 2rem;
+                padding-top: calc(var(--navbar-height) + 2rem);
+                /* Added padding to content instead */
+                background: var(--bg-secondary);
+                min-height: 100vh;
+                width: calc(100% - 280px) !important;
+                position: relative;
+                z-index: 1;
+            }
+
+            /* Fix Sidebar Navigation Styling */
+            .sidebar-nav {
+                list-style: none;
+                padding: 1.5rem 1rem;
+            }
+
+            .sidebar-section {
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: var(--text-secondary);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                margin: 1.5rem 0 0.5rem 1rem;
+            }
+
+            .sidebar-section:first-child {
+                margin-top: 0;
+            }
+
+            .sidebar-link {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 0.75rem 1rem;
+                border-radius: 0.5rem;
+                color: var(--text-secondary);
+                transition: var(--transition);
+                font-weight: 500;
+                margin-bottom: 0.25rem;
+            }
+
+            .sidebar-link:hover {
+                background: var(--bg-secondary);
+                color: var(--primary);
+            }
+
+            .sidebar-link.active {
+                background: linear-gradient(90deg, rgba(255, 107, 53, 0.1), transparent);
+                color: var(--primary);
+                border-left: 3px solid var(--primary);
+            }
+
+            .sidebar-link i {
+                width: 20px;
+                text-align: center;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Ensure content visibility - Critical Fixes */
+        .dashboard-view {
+            width: 100%;
+            transition: opacity 0.3s ease;
+        }
+
+        .dashboard-view.active {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Updated for Single Page Scroll Layout */
+        .sub-navbar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            /* Sticky Navigation */
+            position: sticky;
+            top: 2rem;
+            background: var(--bg-secondary);
+            z-index: 90;
+            padding-top: 1rem;
+        }
+
+        .sub-nav-item {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-size: 1rem;
+            text-decoration: none;
+            /* For anchor tags */
+        }
+
+        .sub-nav-item:hover {
+            color: var(--primary);
+            background: rgba(2, 132, 199, 0.1);
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+
+        .sub-nav-item.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* All sections visible sequentially */
+        .sub-tab-content {
+            display: block;
+            /* Always visible */
+            margin-bottom: 4rem;
+            /* Spacing between huge sections */
+            scroll-margin-top: 150px;
+            /* Offset for sticky header */
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Hide the border for the first one */
+        #sub-view-overview {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        /* Chart Control Interactivity */
+        .chart-control-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .chart-control-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* RTL/LTR Responsive Helper */
+        [dir="rtl"] .sub-navbar {
+            flex-direction: row;
+        }
+
+        /* RTL Desktop Dashboard Support */
+        @media (min-width: 993px) {
+            [dir="rtl"] .dashboard-sidebar {
+                left: auto;
+                right: 0;
+                border-right: none;
+                border-left: 1px solid var(--border-color);
+            }
+
+            [dir="rtl"] .dashboard-main {
+                margin-left: 0 !important;
+                margin-right: 280px !important;
+            }
+
+            [dir="rtl"] .sidebar-link.active {
+                border-left: none;
+                border-right: 3px solid var(--primary);
+                background: linear-gradient(270deg, rgba(255, 107, 53, 0.1), transparent);
+            }
+
+            [dir="rtl"] .sidebar-section {
+                margin: 1.5rem 1rem 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand"><span class="brand-logo-box"></span><span
+                    class="brand-text">AquaFlow Tech</span></a>
+            <ul class="navbar-menu">
+                <li class="navbar-item has-dropdown">
+                    <a class="navbar-link">
+                        Home <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="index.html" class="dropdown-item">Home 1</a></li>
+                        <li><a href="home2.html" class="dropdown-item">Home 2</a></li>
+                    </ul>
+                </li>
+                <li class="navbar-item">
+                    <a href="about.html" class="navbar-link">About Us</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="services.html" class="navbar-link">Services</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="contact.html" class="navbar-link">Contact</a>
+                </li>
+                <li class="navbar-item has-dropdown">
+                    <a class="navbar-link">
+                        Dashboard <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="user-dashboard.html" class="dropdown-item">User Dashboard</a></li>
+                        <li><a href="admin-dashboard.html" class="dropdown-item">Admin Dashboard</a></li>
+                    </ul>
+                </li>
+                <li class="navbar-item">
+                    <a href="login.html" class="navbar-link">Login</a>
+                </li>
+                <!-- Mobile Only Controls inside Menu -->
+                <div class="mobile-menu-controls">
+                    <button class="theme-toggle" title="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="rtl-toggle" title="Toggle RTL"><i class="fas fa-globe"></i></button>
+                </div>
+            </ul>
+            <div class="navbar-controls">
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <button class="mobile-floating-trigger" onclick="toggleSidebar()">
+        <i class="fas fa-arrow-right"></i>
+    </button>
+    <div class="dashboard-overlay" onclick="toggleSidebar()"></div>
+    <div class="dashboard-container">
+        <aside class="dashboard-sidebar">
+            <div class="mobile-close">
+                <a href="index.html" class="navbar-brand"
+                    style="margin: 0; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
+                    <span class="brand-logo-box" style="width: 32px; height: 32px; font-size: 1rem;"></span>
+                    <span class="brand-text" style="font-size: 1.25rem; font-weight: 800; white-space: nowrap;">AquaFlow
+                        Tech</span>
+                </a>
+                <button onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-section">Dashboard</li>
+                <li><a href="#sub-view-overview" class="sidebar-link active sub-nav-item"
+                        onclick="scrollToSection(event, 'sub-view-overview')"><i class="fas fa-home"></i>
+                        <span>General Overview</span></a></li>
+                <li><a href="#sub-view-usage" class="sidebar-link sub-nav-item"
+                        onclick="scrollToSection(event, 'sub-view-usage')"><i class="fas fa-chart-line"></i>
+                        <span>Usage Analytics</span></a></li>
+                <li><a href="#sub-view-billing" class="sidebar-link sub-nav-item"
+                        onclick="scrollToSection(event, 'sub-view-billing')"><i class="fas fa-file-invoice-dollar"></i>
+                        <span>Billing & Payments</span></a></li>
+                <li><a href="#sub-view-diagnostics" class="sidebar-link sub-nav-item"
+                        onclick="scrollToSection(event, 'sub-view-diagnostics')"><i class="fas fa-heartbeat"></i>
+                        <span>System Diagnostics</span></a></li>
+
+                <li class="sidebar-section">Support</li>
+                <li><a href="contact.html" class="sidebar-link"><i class="fas fa-headset"></i> <span>Contact
+                            Support</span></a>
+                </li>
+                <li><a href="index.html" class="sidebar-link"><i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span></a></li>
+
+                <li class="sidebar-section">System</li>
+                <li class="mobile-sidebar-controls" style="display: none;">
+                    <div
+                        style="display: flex; gap: 1.5rem; justify-content: center; align-items: center; padding-bottom: 1rem;">
+                        <button class="theme-toggle" title="Toggle theme"
+                            style="width: 48px; height: 48px; border-radius: 50%; background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; transition: all 0.3s ease;">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <button class="rtl-toggle" title="Toggle RTL"
+                            style="width: 48px; height: 48px; border-radius: 50%; background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; transition: all 0.3s ease;">
+                            <i class="fas fa-globe"></i>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="dashboard-main">
+            <!-- Dashboard View -->
+            <div id="view-dashboard" class="dashboard-view active" style="display: block;">
+                <div class="dashboard-header" style="margin-bottom: 2rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <button class="sidebar-toggle-btn" onclick="toggleSidebar()">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                            <div>
+                                <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem; color: white;">
+                                    Welcome
+                                    Back,
+                                    John!</h1>
+                                <p style="opacity: 0.9; font-size: 1.125rem; color: rgba(255,255,255,0.9);">Here's your
+                                    service
+                                    overview</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> New Service Request
+                        </button>
+                    </div>
+                </div>
+
+                <!-- General Overview Content -->
+                <div id="sub-view-overview" class="sub-tab-content active">
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="dashboard-card-header">
+                                <span class="dashboard-card-title">Active Requests</span>
+                                <i class="fas fa-clipboard-list" style="color: var(--primary); font-size: 1.5rem;"></i>
+                            </div>
+                            <div class="dashboard-card-value">3</div>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+                                <i class="fas fa-arrow-up" style="color: var(--success);"></i> 2 new this week
+                            </p>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="dashboard-card-header">
+                                <span class="dashboard-card-title">Completed</span>
+                                <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.5rem;"></i>
+                            </div>
+                            <div class="dashboard-card-value">12</div>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+                                Total services completed
+                            </p>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="dashboard-card-header">
+                                <span class="dashboard-card-title">Upcoming</span>
+                                <i class="fas fa-calendar" style="color: var(--secondary); font-size: 1.5rem;"></i>
+                            </div>
+                            <div class="dashboard-card-value">1</div>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+                                Scheduled for next week
+                            </p>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="dashboard-card-header">
+                                <span class="dashboard-card-title">Saved Addresses</span>
+                                <i class="fas fa-map-marker-alt" style="color: var(--warning); font-size: 1.5rem;"></i>
+                            </div>
+                            <div class="dashboard-card-value">2</div>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+                                Properties on file
+                            </p>
+                        </div>
+                    </div>
+
+
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+                        <div class="card scroll-reveal">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                                <h2 style="font-size: 1.5rem;">Efficiency Score</h2>
+                                <div
+                                    style="background: var(--bg-secondary); padding: 0.25rem; border-radius: 0.5rem; display: flex; gap: 0.25rem;">
+                                    <button class="btn btn-sm active-chart-filter"
+                                        onclick="updateEfficiency(this, '1M')"
+                                        style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: white; color: var(--primary);">1M</button>
+                                    <button class="btn btn-sm" onclick="updateEfficiency(this, '6M')"
+                                        style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: transparent; color: var(--text-secondary);">6M</button>
+                                    <button class="btn btn-sm" onclick="updateEfficiency(this, '1Y')"
+                                        style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: transparent; color: var(--text-secondary);">1Y</button>
+                                </div>
+                            </div>
+                            <canvas id="efficiencyChart" style="width: 100%; height: 250px;"></canvas>
+                            <div style="text-align: center; margin-top: 1rem;">
+                                <span style="font-size: 2rem; font-weight: 800; color: var(--success);">A+</span>
+                                <p style="color: var(--text-secondary);">Your home efficiency rating</p>
+                            </div>
+                        </div>
+
+                        <div class="card scroll-reveal">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                                <h2 style="font-size: 1.5rem;">Water Usage Analysis</h2>
+                                <div
+                                    style="background: var(--bg-secondary); padding: 0.25rem; border-radius: 0.5rem; display: flex; gap: 0.25rem;">
+                                    <button class="btn btn-sm active-chart-filter"
+                                        onclick="updateWaterUsage(this, 'Week')"
+                                        style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: white; color: var(--primary);">Week</button>
+                                    <button class="btn btn-sm" onclick="updateWaterUsage(this, 'Month')"
+                                        style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: transparent; color: var(--text-secondary);">Month</button>
+                                </div>
+                            </div>
+                            <canvas id="waterUsageChart" style="width: 100%; height: 250px;"></canvas>
+                            <div style="margin-top: 1rem; display: flex; justify-content: space-around;">
+                                <div style="text-align: center;">
+                                    <span style="display: block; font-weight: 700;">1,240 Gal</span>
+                                    <span style="font-size: 0.8rem; color: var(--text-secondary);">Total Consumed</span>
+                                </div>
+                                <div style="text-align: center;">
+                                    <span style="display: block; font-weight: 700; color: var(--success);">-12%</span>
+                                    <span style="font-size: 0.8rem; color: var(--text-secondary);">vs Last Month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-top: 2rem;">
+                        <h3 style="font-size: 1.25rem; margin-bottom: 1rem;">Usage Details</h3>
+                        <canvas id="userUsageDetailChart" style="width: 100%; height: 350px;"></canvas>
+                    </div>
+
+                </div>
+
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 2rem;">
+                    <div class="card scroll-reveal">
+                        <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Recent Service Requests</h2>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div
+                                style="padding: 1.5rem; background: var(--bg-secondary); border-radius: 0.75rem; border-left: 4px solid var(--warning);">
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                                    <h3 style="font-size: 1.125rem;">Water Heater Repair</h3>
+                                    <span
+                                        style="background: rgba(245, 158, 11, 0.1); color: var(--warning); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600;">IN
+                                        PROGRESS</span>
+                                </div>
+                                <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">No hot water in master
+                                    bathroom</p>
+                                <div style="display: flex; gap: 1.5rem; font-size: 0.875rem; color: var(--text-muted);">
+                                    <span><i class="fas fa-calendar"></i> Jan 10, 2024</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> 123 Main St</span>
+                                </div>
+                            </div>
+
+                            <div
+                                style="padding: 1.5rem; background: var(--bg-secondary); border-radius: 0.75rem; border-left: 4px solid var(--success);">
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                                    <h3 style="font-size: 1.125rem;">Drain Cleaning</h3>
+                                    <span
+                                        style="background: rgba(34, 197, 94, 0.1); color: var(--success); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600;">COMPLETED</span>
+                                </div>
+                                <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Kitchen sink clogged</p>
+                                <div style="display: flex; gap: 1.5rem; font-size: 0.875rem; color: var(--text-muted);">
+                                    <span><i class="fas fa-calendar"></i> Jan 8, 2024</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> 123 Main St</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="card scroll-reveal" style="margin-bottom: 1.5rem;">
+                            <h3 style="font-size: 1.25rem; margin-bottom: 1rem;">Service Trends</h3>
+                            <canvas id="customerChart" style="width: 100%; height: 180px;"></canvas>
+                        </div>
+
+                        <div class="card scroll-reveal" style="margin-bottom: 1.5rem;">
+                            <h3 style="font-size: 1.25rem; margin-bottom: 1rem;">Quick Actions</h3>
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <button class="btn btn-primary" style="width: 100%; justify-content: flex-start;">
+                                    <i class="fas fa-plus"></i> New Request
+                                </button>
+                                <button class="btn btn-outline" style="width: 100%; justify-content: flex-start;">
+                                    <i class="fas fa-calendar"></i> Schedule Service
+                                </button>
+                                <button class="btn btn-outline" style="width: 100%; justify-content: flex-start;">
+                                    <i class="fas fa-file-invoice"></i> View Invoices
+                                </button>
+                                <button class="btn btn-outline" style="width: 100%; justify-content: flex-start;">
+                                    <i class="fas fa-user"></i> Edit Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End General Overview -->
+
+
+
+
+            <!-- Usage Analytics Sub-View -->
+            <div id="sub-view-usage" class="sub-tab-content">
+                <div class="grid grid-4" style="margin-bottom: 2rem; gap: 1.5rem;">
+                    <div class="card" style="text-align: center;">
+                        <i class="fas fa-tint"
+                            style="font-size: 2rem; color: var(--primary); margin-bottom: 0.75rem;"></i>
+                        <h3 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Avg Daily
+                            Usage</h3>
+                        <div style="font-size: 1.75rem; font-weight: 800; color: var(--primary);">42 Gal</div>
+                        <span style="font-size: 0.75rem; color: var(--success);"><i class="fas fa-arrow-down"></i> -8%
+                            vs last
+                            month</span>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <i class="fas fa-clock"
+                            style="font-size: 2rem; color: var(--secondary); margin-bottom: 0.75rem;"></i>
+                        <h3 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Peak Usage
+                            Time</h3>
+                        <div style="font-size: 1.75rem; font-weight: 800; color: var(--secondary);">7:30 AM</div>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Morning shower time</span>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <i class="fas fa-leaf"
+                            style="font-size: 2rem; color: var(--success); margin-bottom: 0.75rem;"></i>
+                        <h3 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Efficiency
+                            Score</h3>
+                        <div style="font-size: 1.75rem; font-weight: 800; color: var(--success);">92%</div>
+                        <span style="font-size: 0.75rem; color: var(--success);"><i class="fas fa-arrow-up"></i> +5%
+                            improved</span>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <i class="fas fa-exclamation-triangle"
+                            style="font-size: 2rem; color: var(--warning); margin-bottom: 0.75rem;"></i>
+                        <h3 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Leak Detection
+                        </h3>
+                        <div style="font-size: 1.75rem; font-weight: 800; color: var(--success);">None</div>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Last checked today</span>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h2 style="font-size: 1.5rem;">Water Consumption Trends</h2>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="chart-control-btn" onclick="updateMockUserChart('consumption')">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                            <div
+                                style="background: var(--bg-secondary); padding: 0.25rem; border-radius: 0.5rem; display: flex; gap: 0.25rem;">
+                                <button class="btn btn-sm active-chart-filter"
+                                    onclick="updateConsumption(this, 'daily')"
+                                    style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: white; color: var(--primary);">Daily</button>
+                                <button class="btn btn-sm" onclick="updateConsumption(this, 'weekly')"
+                                    style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: transparent; color: var(--text-secondary);">Weekly</button>
+                                <button class="btn btn-sm" onclick="updateConsumption(this, 'monthly')"
+                                    style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: transparent; color: var(--text-secondary);">Monthly</button>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="consumptionTrendChart" style="width: 100%; height: 320px;"></canvas>
+                    <div style="display: flex; justify-content: space-around; margin-top: 1rem;">
+                        <div style="text-align: center;">
+                            <span style="display: block; font-weight: 700; font-size: 1.25rem;">1,240 Gal</span>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">This Month</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <span
+                                style="display: block; font-weight: 700; font-size: 1.25rem; color: var(--success);">-180
+                                Gal</span>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">vs Last Month</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <span
+                                style="display: block; font-weight: 700; font-size: 1.25rem; color: var(--primary);">$48.50</span>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">Estimated Cost</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-2" style="gap: 2rem; margin-bottom: 2rem;">
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h2 style="font-size: 1.5rem;">Usage by Fixture</h2>
+                        </div>
+                        <canvas id="fixtureUsageChart" style="width: 100%; height: 260px;"></canvas>
+                        <div
+                            style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span
+                                    style="width: 12px; height: 12px; border-radius: 50%; background: #06b6d4;"></span>
+                                <span style="font-size: 0.8rem; color: var(--text-primary); font-weight: 500;">Shower
+                                    (35%)</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span
+                                    style="width: 12px; height: 12px; border-radius: 50%; background: #6366f1;"></span>
+                                <span style="font-size: 0.8rem; color: var(--text-primary); font-weight: 500;">Toilet
+                                    (25%)</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span
+                                    style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e;"></span>
+                                <span style="font-size: 0.8rem; color: var(--text-primary); font-weight: 500;">Kitchen
+                                    (20%)</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span
+                                    style="width: 12px; height: 12px; border-radius: 50%; background: #f59e0b;"></span>
+                                <span style="font-size: 0.8rem; color: var(--text-primary); font-weight: 500;">Other
+                                    (20%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h2 style="font-size: 1.5rem;">Hourly Usage Pattern</h2>
+                            <select class="chart-control-btn" onchange="updateHourlyPattern(this)">
+                                <option value="today">Today</option>
+                                <option value="yesterday">Yesterday</option>
+                                <option value="average">Weekly Avg</option>
+                            </select>
+                        </div>
+                        <canvas id="hourlyPatternChart" style="width: 100%; height: 260px;"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid grid-3" style="gap: 2rem;">
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="font-size: 1.25rem;">Temperature Usage</h3>
+                        </div>
+                        <canvas id="tempUsageChart" style="width: 100%; height: 200px;"></canvas>
+                        <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.35rem;">
+                                <span
+                                    style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></span>
+                                <span
+                                    style="font-size: 0.75rem; color: var(--text-primary); font-weight: 500;">Hot</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.35rem;">
+                                <span
+                                    style="width: 10px; height: 10px; border-radius: 50%; background: #06b6d4;"></span>
+                                <span
+                                    style="font-size: 0.75rem; color: var(--text-primary); font-weight: 500;">Cold</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="font-size: 1.25rem;">Comparison vs Neighbors</h3>
+                            <span
+                                style="background: rgba(34, 197, 94, 0.1); color: var(--success); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem;">-15%
+                                Less</span>
+                        </div>
+                        <canvas id="neighborCompareChart" style="width: 100%; height: 200px;"></canvas>
+                    </div>
+
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="font-size: 1.25rem;">Savings Potential</h3>
+                        </div>
+                        <canvas id="savingsPotentialChart" style="width: 100%; height: 200px;"></canvas>
+                        <div style="text-align: center; margin-top: 0.75rem;">
+                            <span style="font-size: 1.25rem; font-weight: 700; color: var(--success);">$12.40</span>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">/month savings
+                                possible</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Billing & Payments Sub-View -->
+            <div id="sub-view-billing" class="sub-tab-content">
+                <div class="grid grid-4" style="margin-bottom: 2rem; gap: 1.5rem;">
+                    <div class="card" style="text-align: center;">
+                        <i class="fas fa-dollar-sign"
+                            style="font-size: 1.75rem; color: var(--primary); margin-bottom: 0.5rem;"></i>
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1rem; color: var(--text-secondary);">Total Billed
+                            (YTD)
+                        </h3>
+                        <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">$1,240</div>
+                        <span style="font-size: 0.75rem; color: var(--success);"><i class="fas fa-arrow-down"></i> -5%
+                            vs last
+                            year</span>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <i class="fas fa-calendar-alt"
+                            style="font-size: 1.75rem; color: var(--secondary); margin-bottom: 0.5rem;"></i>
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1rem; color: var(--text-secondary);">Avg Monthly
+                            Bill</h3>
+                        <div style="font-size: 2rem; font-weight: 800; color: var(--secondary);">$103</div>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Based on 12 months</span>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <i class="fas fa-credit-card"
+                            style="font-size: 1.75rem; color: var(--success); margin-bottom: 0.5rem;"></i>
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1rem; color: var(--text-secondary);">Next Bill Due
+                        </h3>
+                        <div style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Feb 15, 2026
+                        </div>
+                        <span
+                            style="background: rgba(34, 197, 94, 0.1); color: var(--success); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem;">Auto-Pay
+                            On</span>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <i class="fas fa-piggy-bank"
+                            style="font-size: 1.75rem; color: var(--warning); margin-bottom: 0.5rem;"></i>
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1rem; color: var(--text-secondary);">Total Saved
+                        </h3>
+                        <div style="font-size: 2rem; font-weight: 800; color: var(--success);">$156</div>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">With loyalty discount</span>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h2 style="font-size: 1.5rem;">Payment History</h2>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="chart-control-btn" onclick="updateMockUserChart('billingHistory')">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                            <div
+                                style="background: var(--bg-secondary); padding: 0.25rem; border-radius: 0.5rem; display: flex; gap: 0.25rem;">
+                                <button class="btn btn-sm active-chart-filter"
+                                    onclick="updatePaymentHistory(this, '6M')"
+                                    style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: white; color: var(--primary);">6M</button>
+                                <button class="btn btn-sm" onclick="updatePaymentHistory(this, '1Y')"
+                                    style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: transparent; color: var(--text-secondary);">1Y</button>
+                                <button class="btn btn-sm" onclick="updatePaymentHistory(this, 'ALL')"
+                                    style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: transparent; color: var(--text-secondary);">All</button>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="paymentHistoryChart" style="width: 100%; height: 320px;"></canvas>
+                    <div style="display: flex; justify-content: space-around; margin-top: 1rem;">
+                        <div style="text-align: center;">
+                            <span style="display: block; font-weight: 700; font-size: 1.25rem;">12</span>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">Payments Made</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <span
+                                style="display: block; font-weight: 700; font-size: 1.25rem; color: var(--success);">100%</span>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">On-Time Rate</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <span
+                                style="display: block; font-weight: 700; font-size: 1.25rem; color: var(--primary);">$0</span>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">Outstanding Balance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-2" style="gap: 2rem; margin-bottom: 2rem;">
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h2 style="font-size: 1.5rem;">Cost Breakdown</h2>
+                        </div>
+                        <canvas id="costBreakdownChart" style="width: 100%; height: 260px;"></canvas>
+                        <div
+                            style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span
+                                    style="width: 12px; height: 12px; border-radius: 50%; background: #06b6d4;"></span>
+                                <span style="font-size: 0.8rem;">Service (45%)</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span
+                                    style="width: 12px; height: 12px; border-radius: 50%; background: #6366f1;"></span>
+                                <span style="font-size: 0.8rem;">Parts (30%)</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span
+                                    style="width: 12px; height: 12px; border-radius: 50%; background: #f59e0b;"></span>
+                                <span style="font-size: 0.8rem;">Labor (25%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h2 style="font-size: 1.5rem;">Monthly Comparison</h2>
+                            <select class="chart-control-btn" onchange="updateMonthlyComp(this)">
+                                <option value="thisYear">This Year</option>
+                                <option value="lastYear">Last Year</option>
+                            </select>
+                        </div>
+                        <canvas id="monthlyCompChart" style="width: 100%; height: 260px;"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid grid-3" style="gap: 2rem;">
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="font-size: 1.25rem;">Payment Methods</h3>
+                        </div>
+                        <canvas id="userPaymentMethodsChart" style="width: 100%; height: 200px;"></canvas>
+                        <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.35rem;">
+                                <span
+                                    style="width: 10px; height: 10px; border-radius: 50%; background: #6366f1;"></span>
+                                <span
+                                    style="font-size: 0.75rem; color: var(--text-primary); font-weight: 500;">Auto-Pay</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.35rem;">
+                                <span
+                                    style="width: 10px; height: 10px; border-radius: 50%; background: #22c55e;"></span>
+                                <span
+                                    style="font-size: 0.75rem; color: var(--text-primary); font-weight: 500;">Manual</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="font-size: 1.25rem;">Seasonal Trends</h3>
+                            <span
+                                style="background: rgba(99, 102, 241, 0.1); color: var(--secondary); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem;">2
+                                yr avg</span>
+                        </div>
+                        <canvas id="seasonalTrendsChart" style="width: 100%; height: 200px;"></canvas>
+                    </div>
+
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="font-size: 1.25rem;">Budget Tracker</h3>
+                        </div>
+                        <canvas id="budgetTrackerChart" style="width: 100%; height: 200px;"></canvas>
+                        <div
+                            style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 0.5rem;">
+                            <div style="text-align: center;">
+                                <span style="display: block; font-size: 0.9rem; font-weight: 700;">$1,200</span>
+                                <span style="font-size: 0.65rem; color: var(--text-secondary);">Budget</span>
+                            </div>
+                            <div style="text-align: center;">
+                                <span
+                                    style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--primary);">$1,040</span>
+                                <span style="font-size: 0.65rem; color: var(--text-secondary);">Spent</span>
+                            </div>
+                            <div style="text-align: center;">
+                                <span
+                                    style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--success);">$160</span>
+                                <span style="font-size: 0.65rem; color: var(--text-secondary);">Remaining</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Diagnostics Content -->
+            <div id="sub-view-diagnostics" class="sub-tab-content">
+                <div class="grid grid-4" style="gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="card metric-card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                            <span style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">System
+                                Health</span>
+                            <div class="icon-box warning"
+                                style="background: rgba(34, 197, 94, 0.1); color: var(--success); padding: 0.5rem; border-radius: 0.5rem;">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value"
+                            style="font-size: 1.75rem; font-weight: 800; color: var(--text-primary);">98%</div>
+                        <div class="metric-trend positive"
+                            style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; margin-top: 0.25rem; color: var(--success);">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Optimal</span>
+                        </div>
+                    </div>
+
+                    <div class="card metric-card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                            <span style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Active
+                                Sensors</span>
+                            <div class="icon-box"
+                                style="background: rgba(99, 102, 241, 0.1); color: var(--secondary); padding: 0.5rem; border-radius: 0.5rem;">
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value"
+                            style="font-size: 1.75rem; font-weight: 800; color: var(--text-primary);">12/12</div>
+                        <div class="metric-trend positive"
+                            style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; margin-top: 0.25rem; color: var(--success);">
+                            <i class="fas fa-check-circle"></i>
+                            <span>All Online</span>
+                        </div>
+                    </div>
+
+                    <div class="card metric-card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                            <span style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Battery
+                                Levels</span>
+                            <div class="icon-box"
+                                style="background: rgba(245, 158, 11, 0.1); color: var(--warning); padding: 0.5rem; border-radius: 0.5rem;">
+                                <i class="fas fa-battery-three-quarters"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value"
+                            style="font-size: 1.75rem; font-weight: 800; color: var(--text-primary);">Good</div>
+                        <div class="metric-trend"
+                            style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; margin-top: 0.25rem; color: var(--text-secondary);">
+                            <span>Avg 85%</span>
+                        </div>
+                    </div>
+
+                    <div class="card metric-card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                            <span
+                                style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Maintenance</span>
+                            <div class="icon-box"
+                                style="background: rgba(6, 182, 212, 0.1); color: var(--info); padding: 0.5rem; border-radius: 0.5rem;">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value"
+                            style="font-size: 1.75rem; font-weight: 800; color: var(--text-primary);">28 Days</div>
+                        <div class="metric-trend"
+                            style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; margin-top: 0.25rem; color: var(--text-secondary);">
+                            <span>Next Scheduled</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-2" style="gap: 2rem; margin-bottom: 2rem;">
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h2 style="font-size: 1.5rem;">Overall System Health</h2>
+                        </div>
+                        <canvas id="systemHealthChart" style="width: 100%; height: 300px;"></canvas>
+                        <div
+                            style="text-align: center; margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
+                            Your system is performing optimally with no critical issues detected.
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h2 style="font-size: 1.5rem;">Water Pressure History</h2>
+                        </div>
+                        <canvas id="pressureHistoryChart" style="width: 100%; height: 300px;"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid grid-2" style="gap: 2rem;">
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h2 style="font-size: 1.5rem;">Filter Status</h2>
+                        </div>
+                        <canvas id="filterStatusChart" style="width: 100%; height: 260px;"></canvas>
+                    </div>
+
+                    <div class="card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h2 style="font-size: 1.5rem;">Sensor Activity Log</h2>
+                        </div>
+                        <canvas id="sensorActivityChart" style="width: 100%; height: 260px;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function toggleSidebar() {
+                    const sidebar = document.querySelector('.dashboard-sidebar');
+                    const overlay = document.querySelector('.dashboard-overlay');
+                    const trigger = document.querySelector('.mobile-floating-trigger');
+
+                    sidebar.classList.toggle('active');
+                    overlay.classList.toggle('active');
+
+                    if (trigger) {
+                        trigger.style.opacity = sidebar.classList.contains('active') ? '0' : '1';
+                        trigger.style.pointerEvents = sidebar.classList.contains('active') ? 'none' : 'auto';
+                    }
+
+                    const closeBtn = document.querySelector('.mobile-close');
+                    if (closeBtn) closeBtn.style.display = sidebar.classList.contains('active') ? 'flex' : 'none';
+                    document.body.classList.toggle('no-scroll');
+                }
+
+                function switchView(viewId) {
+                    // Hide all views
+                    document.querySelectorAll('.dashboard-view').forEach(view => {
+                        view.style.display = 'none';
+                        view.classList.remove('active');
+                    });
+
+                    const targetView = document.getElementById(viewId);
+                    // Show target view
+                    if (targetView) {
+                        targetView.style.display = 'block';
+                        targetView.style.opacity = '1';
+
+                        // Force visibility of children
+                        const hiddenChildren = targetView.querySelectorAll('.card, .grid, .dashboard-grid');
+                        hiddenChildren.forEach(child => {
+                            child.style.opacity = '1';
+                            child.style.transform = 'none';
+                            child.style.visibility = 'visible';
+                        });
+
+                        setTimeout(() => {
+                            targetView.classList.add('active');
+                            window.dispatchEvent(new Event('resize'));
+                        }, 10);
+                    }
+
+                    // Update sidebar active state
+                    document.querySelectorAll('.sidebar-nav .sidebar-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('data-target') === viewId) {
+                            link.classList.add('active');
+                        }
+                    });
+
+                    // Close sidebar on mobile if open
+                    if (document.querySelector('.dashboard-sidebar').classList.contains('active')) {
+                        toggleSidebar();
+                    }
+
+                    // Trigger chart resize
+                    window.dispatchEvent(new Event('resize'));
+                }
+
+                // Sub-View Switching Logic
+                function switchSubView(subViewName) {
+                    // Update buttons
+                    document.querySelectorAll('.sub-nav-item').forEach(btn => {
+                        btn.classList.remove('active');
+                        if (btn.getAttribute('onclick').includes(subViewName)) {
+                            btn.classList.add('active');
+                        }
+                    });
+
+                    // Show content
+                    document.querySelectorAll('.sub-tab-content').forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `sub-view-${subViewName}`) {
+                            content.classList.add('active');
+                        }
+                    });
+
+                    // Trigger resize for charts
+                    setTimeout(() => {
+                        window.dispatchEvent(new Event('resize'));
+                    }, 50);
+                }
+
+                // Attach event listeners to sidebar
+                // Chart Initialization State
+                const chartsInitialized = {
+                    overview: false,
+                    usage: false,
+                    billing: false
+                };
+
+                // Initialize Sub-Dashboard Charts
+                const createSubChart = (id, options) => {
+                    const canvas = document.getElementById(id);
+                    if (canvas) {
+                        if (typeof Chart !== 'undefined') {
+                            // Destroy existing chart if it exists to prevent duplicates
+                            const existingChart = window.chartInstances ? window.chartInstances.find(c => c.canvas.id === id) : null;
+                            if (existingChart) {
+                                // existingChart.destroy(); // If Chart class supports destroy
+                            }
+
+                            const chart = new Chart(id, options);
+                            window.chartInstances = window.chartInstances || [];
+                            window.chartInstances.push(chart);
+                            return chart;
+                        }
+                    }
+                };
+
+                function initializeChartsForTab(tabName) {
+                    if (typeof Chart === 'undefined') return;
+
+                    if (tabName === 'overview' && !chartsInitialized.overview) {
+                        chartsInitialized.overview = true;
+
+                        // Detailed Consumption (Line)
+                        createSubChart('userUsageDetailChart', {
+                            type: 'line',
+                            data: [150, 180, 160, 200, 190, 220, 210, 230, 250, 240, 280, 300],
+                            labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
+                            colors: ['#06b6d4']
+                        });
+
+                        // Peak Usage (Bar)
+                        createSubChart('userPeakUsageChart', {
+                            type: 'bar',
+                            data: [45, 80, 60, 90, 75],
+                            labels: ['Morning', 'Noon', 'Afternoon', 'Evening', 'Night'],
+                            colors: ['#FF6B35', '#fde047', '#f97316', '#6366f1', '#1e293b']
+                        });
+
+                        // Efficiency Detail (Pie)
+                        createSubChart('userEfficiencyDetailChart', {
+                            type: 'pie',
+                            data: [70, 20, 10],
+                            labels: ['Efficient', 'Excessive', 'Leakage'],
+                            colors: ['#22c55e', '#f59e0b', '#ef4444']
+                        });
+
+                        // Placeholder inits for missing charts in overview to prevent errors if they exist in DOM
+                        if (document.getElementById('requestsChart')) createSubChart('requestsChart', { type: 'bar', data: [5, 10, 8, 12, 15], labels: ['Week 1', '2', '3', '4', '5'], colors: ['#6366f1'] });
+                        if (document.getElementById('monthlyChart')) createSubChart('monthlyChart', { type: 'line', data: [120, 132, 101, 134, 90], labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'], colors: ['#22c55e'] });
+                        if (document.getElementById('efficiencyChart')) createSubChart('efficiencyChart', { type: 'line', data: [85, 88, 90, 92], labels: ['W1', 'W2', 'W3', 'W4'], colors: ['#f59e0b'] });
+                        if (document.getElementById('waterUsageChart')) createSubChart('waterUsageChart', { type: 'bar', data: [300, 450, 320, 280], labels: ['W1', 'W2', 'W3', 'W4'], colors: ['#06b6d4'] });
+                        if (document.getElementById('customerChart')) createSubChart('customerChart', { type: 'line', data: [5, 8, 12, 15, 10], labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], colors: ['#ec4899'] });
+                    }
+
+                    if (tabName === 'usage' && !chartsInitialized.usage) {
+                        chartsInitialized.usage = true;
+
+                        // Consumption Trend (Line)
+                        createSubChart('consumptionTrendChart', {
+                            type: 'line',
+                            data: [42, 38, 45, 40, 36, 44, 41, 39, 43, 37, 35, 40],
+                            labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7', 'Day 8', 'Day 9', 'Day 10', 'Day 11', 'Day 12'],
+                            colors: ['#06b6d4']
+                        });
+
+                        // Fixture Usage (Pie)
+                        createSubChart('fixtureUsageChart', {
+                            type: 'pie',
+                            data: [35, 25, 20, 20],
+                            labels: ['Shower', 'Toilet', 'Kitchen', 'Other'],
+                            colors: ['#06b6d4', '#6366f1', '#22c55e', '#f59e0b']
+                        });
+
+                        // Hourly Pattern (Bar)
+                        createSubChart('hourlyPatternChart', {
+                            type: 'bar',
+                            data: [5, 3, 2, 2, 4, 12, 18, 15, 8, 6, 5, 7, 10, 8, 6, 5, 8, 14, 16, 12, 8, 6, 4, 3],
+                            labels: ['12a', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12p', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
+                            colors: ['#6366f1']
+                        });
+
+                        // Temperature Usage (Pie)
+                        createSubChart('tempUsageChart', {
+                            type: 'pie',
+                            data: [55, 45],
+                            labels: ['Hot', 'Cold'],
+                            colors: ['#ef4444', '#06b6d4']
+                        });
+
+                        // Neighbor Comparison (Bar)
+                        createSubChart('neighborCompareChart', {
+                            type: 'bar',
+                            data: [42, 50, 48, 55],
+                            labels: ['You', 'Avg', 'Similar', 'Area'],
+                            colors: ['#22c55e', '#6366f1', '#f59e0b', '#ec4899']
+                        });
+
+                        // Savings Potential (Pie)
+                        createSubChart('savingsPotentialChart', {
+                            type: 'pie',
+                            data: [78, 22],
+                            labels: ['Current', 'Potential'],
+                            colors: ['#6366f1', '#22c55e']
+                        });
+                    }
+
+                    if (tabName === 'billing' && !chartsInitialized.billing) {
+                        chartsInitialized.billing = true;
+
+                        // Billing History (Area)
+                        createSubChart('userBillingChart', {
+                            type: 'area',
+                            data: [95, 88, 110, 105, 98, 120, 103, 99, 108, 112, 100, 102],
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                            colors: ['#6366f1']
+                        });
+
+                        // Payment History (Area)
+                        createSubChart('paymentHistoryChart', {
+                            type: 'area',
+                            data: [98, 102, 95, 105, 110, 103],
+                            labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                            colors: ['#6366f1']
+                        });
+
+                        // Cost Breakdown (Pie) - If exists
+                        if (document.getElementById('costBreakdownChart')) createSubChart('costBreakdownChart', {
+                            type: 'pie',
+                            data: [45, 30, 25],
+                            labels: ['Service', 'Parts', 'Labor'],
+                            colors: ['#06b6d4', '#6366f1', '#f59e0b']
+                        });
+
+                        // Monthly Comparison (Bar) - If exists
+                        if (document.getElementById('monthlyCompChart')) createSubChart('monthlyCompChart', {
+                            type: 'bar',
+                            data: [95, 88, 110, 105, 98, 120, 103, 99, 108, 112, 100, 102],
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                            colors: ['#FF6B35']
+                        });
+
+                        // User Payment Methods (Pie) - If exists
+                        if (document.getElementById('userPaymentMethodsChart')) createSubChart('userPaymentMethodsChart', {
+                            type: 'pie',
+                            data: [75, 25],
+                            labels: ['Auto-Pay', 'Manual'],
+                            colors: ['#6366f1', '#22c55e']
+                        });
+
+                        // Seasonal Trends (Line)
+                        if (document.getElementById('seasonalTrendsChart')) createSubChart('seasonalTrendsChart', {
+                            type: 'line',
+                            data: [85, 92, 115, 140, 155, 160, 165, 150, 120, 95, 88, 82],
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                            colors: ['#ec4899']
+                        });
+
+                        // Budget Tracker (Pie)
+                        if (document.getElementById('budgetTrackerChart')) createSubChart('budgetTrackerChart', {
+                            type: 'pie',
+                            data: [87, 13],
+                            labels: ['Spent', 'Remaining'],
+                            colors: ['#FF6B35', '#22c55e']
+                        });
+                    }
+                    if (tabName === 'diagnostics' && !chartsInitialized.diagnostics) {
+                        chartsInitialized.diagnostics = true;
+
+                        // System Health (Pie)
+                        createSubChart('systemHealthChart', {
+                            type: 'pie',
+                            data: [98, 2],
+                            labels: ['Healthy', 'Issues'],
+                            colors: ['#22c55e', '#ef4444']
+                        });
+
+                        // Pressure History (Line)
+                        createSubChart('pressureHistoryChart', {
+                            type: 'line',
+                            data: [60, 62, 58, 65, 63, 60, 61],
+                            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                            colors: ['#06b6d4']
+                        });
+
+                        // Filter Status (Bar)
+                        createSubChart('filterStatusChart', {
+                            type: 'bar',
+                            data: [85, 45, 92],
+                            labels: ['Main', 'Softener', 'Kitchen'],
+                            colors: ['#6366f1', '#f59e0b', '#22c55e']
+                        });
+
+                        // Sensor Activity (Area)
+                        createSubChart('sensorActivityChart', {
+                            type: 'area',
+                            data: [0, 0, 1, 0, 0, 0, 2, 0],
+                            labels: ['12am', '3am', '6am', '9am', '12pm', '3pm', '6pm', '9pm'],
+                            colors: ['#ec4899']
+                        });
+                    }
+                }
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    // Initialize ALL charts immediately for single page view
+                    setTimeout(() => {
+                        // Ensure Chart availability check is done inside the function
+                        initializeChartsForTab('overview');
+                        initializeChartsForTab('usage');
+                        initializeChartsForTab('billing');
+                        initializeChartsForTab('diagnostics');
+
+                        // Force resize to ensure canvases render
+                        window.dispatchEvent(new Event('resize'));
+                    }, 500); // Increased timeout to ensure scripts are loaded
+
+                    // Add scroll spy behavior
+                    window.addEventListener('scroll', onScrollSpy);
+
+                    // Sidebar Global Click Handler for Mobile
+                    // Targets ALL links in the sidebar to ensure sidebar closes on click
+                    const sidebarLinks = document.querySelectorAll('.dashboard-sidebar a');
+                    sidebarLinks.forEach(link => {
+                        link.addEventListener('click', (e) => {
+                            if (window.innerWidth <= 992) {
+                                const sidebar = document.querySelector('.dashboard-sidebar');
+                                const overlay = document.querySelector('.dashboard-overlay');
+
+                                // Close sidebar
+                                if (sidebar && overlay) {
+                                    sidebar.classList.remove('active');
+                                    overlay.classList.remove('active');
+                                    document.body.classList.remove('no-scroll');
+                                }
+                            }
+                        });
+                    });
+                });
+
+                function scrollToSection(e, sectionId) {
+                    e.preventDefault();
+
+                    // Remove current active classes
+                    document.querySelectorAll('.sub-nav-item').forEach(el => el.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Close sidebar on mobile
+                    if (window.innerWidth <= 992) {
+                        const sidebar = document.querySelector('.dashboard-sidebar');
+                        const overlay = document.querySelector('.dashboard-overlay');
+                        if (sidebar.classList.contains('active')) {
+                            sidebar.classList.remove('active');
+                            overlay.classList.remove('active');
+                            document.body.classList.remove('no-scroll');
+                        }
+                    }
+
+                    const element = document.getElementById(sectionId);
+                    if (element) {
+                        const offset = 100; // Account for sticky header
+                        const bodyRect = document.body.getBoundingClientRect().top;
+                        const elementRect = element.getBoundingClientRect().top;
+                        const elementPosition = elementRect - bodyRect;
+                        const offsetPosition = elementPosition - offset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                }
+
+                function onScrollSpy() {
+                    const sections = ['sub-view-overview', 'sub-view-usage', 'sub-view-billing', 'sub-view-diagnostics'];
+                    const scrollPos = window.scrollY || document.documentElement.scrollTop;
+                    const offset = 150;
+
+                    sections.forEach(secId => {
+                        const section = document.getElementById(secId);
+                        if (!section) return;
+
+                        const top = section.offsetTop - offset;
+                        const bottom = top + section.offsetHeight;
+
+                        if (scrollPos >= top && scrollPos < bottom) {
+                            document.querySelectorAll('.sub-nav-item').forEach(a => {
+                                a.classList.remove('active');
+                                if (a.getAttribute('href') === '#' + secId) {
+                                    a.classList.add('active');
+                                }
+                            });
+                        }
+                    });
+                }
+
+                // Chart Interaction Functions
+                function updateEfficiency(btn, period) {
+                    const parent = btn.parentElement;
+                    parent.querySelectorAll('.btn').forEach(b => {
+                        b.style.background = 'transparent';
+                        b.style.color = 'var(--text-secondary)';
+                    });
+                    btn.style.background = 'white';
+                    btn.style.color = 'var(--primary)';
+
+                    const chart = window.chartInstances.find(c => c.canvas.id === 'efficiencyChart');
+                    if (chart) {
+                        let data = [];
+                        if (period === '1M') data = [75, 15, 10];
+                        if (period === '6M') data = [65, 25, 10];
+                        if (period === '1Y') data = [80, 15, 5];
+                        chart.updateData(data);
+                    }
+                }
+
+                function updateWaterUsage(btn, period) {
+                    const parent = btn.parentElement;
+                    parent.querySelectorAll('.btn').forEach(b => {
+                        b.style.background = 'transparent';
+                        b.style.color = 'var(--text-secondary)';
+                    });
+                    btn.style.background = 'white';
+                    btn.style.color = 'var(--primary)';
+
+                    const chart = window.chartInstances.find(c => c.canvas.id === 'waterUsageChart');
+                    if (chart) {
+                        let data = [];
+                        let labels = [];
+                        if (period === 'Week') {
+                            data = [320, 310, 290, 280, 250, 240, 220];
+                            labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                        }
+                        if (period === 'Month') {
+                            data = Array.from({ length: 30 }, () => Math.floor(Math.random() * (350 - 200) + 200));
+                            labels = Array.from({ length: 30 }, (_, i) => i + 1);
+                        }
+                        chart.updateData(data, labels);
+                    }
+                }
+
+                function updateMockUserChart(type) {
+                    let chartId = '';
+                    if (type === 'usageDetail') chartId = 'userUsageDetailChart';
+                    if (type === 'billingHistory') chartId = 'paymentHistoryChart';
+                    if (type === 'consumption') chartId = 'consumptionTrendChart';
+
+                    const chart = window.chartInstances.find(c => c.canvas.id === chartId);
+                    if (chart) {
+                        const count = chart.options.data.length;
+                        const newData = Array.from({ length: count }, () => Math.floor(Math.random() * 100) + 50);
+                        chart.updateData(newData);
+                    }
+                }
+
+                function updateConsumption(btn, period) {
+                    const parent = btn.parentElement;
+                    parent.querySelectorAll('.btn').forEach(b => {
+                        b.style.background = 'transparent';
+                        b.style.color = 'var(--text-secondary)';
+                    });
+                    btn.style.background = 'white';
+                    btn.style.color = 'var(--primary)';
+
+                    const chart = window.chartInstances.find(c => c.canvas.id === 'consumptionTrendChart');
+                    if (chart) {
+                        let data = [], labels = [];
+                        if (period === 'daily') {
+                            data = [42, 38, 45, 40, 36, 44, 41];
+                            labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                        }
+                        if (period === 'weekly') {
+                            data = [280, 295, 270, 310];
+                            labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                        }
+                        if (period === 'monthly') {
+                            data = [1240, 1380, 1180, 1420, 1350, 1290];
+                            labels = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        }
+                        chart.updateData(data, labels);
+                    }
+                }
+
+                function updateHourlyPattern(select) {
+                    const chart = window.chartInstances.find(c => c.canvas.id === 'hourlyPatternChart');
+                    if (chart) {
+                        let data = [];
+                        if (select.value === 'today') data = [5, 3, 2, 2, 4, 12, 18, 15, 8, 6, 5, 7, 10, 8, 6, 5, 8, 14, 16, 12, 8, 6, 4, 3];
+                        if (select.value === 'yesterday') data = [4, 2, 2, 1, 3, 10, 16, 14, 9, 7, 6, 8, 11, 7, 5, 6, 9, 15, 14, 11, 7, 5, 3, 2];
+                        if (select.value === 'average') data = [4, 3, 2, 2, 4, 11, 17, 14, 8, 6, 5, 7, 10, 8, 6, 5, 8, 14, 15, 11, 8, 6, 4, 3];
+                        chart.updateData(data);
+                    }
+                }
+
+                function updatePaymentHistory(btn, period) {
+                    const parent = btn.parentElement;
+                    parent.querySelectorAll('.btn').forEach(b => {
+                        b.style.background = 'transparent';
+                        b.style.color = 'var(--text-secondary)';
+                    });
+                    btn.style.background = 'white';
+                    btn.style.color = 'var(--primary)';
+
+                    const chart = window.chartInstances.find(c => c.canvas.id === 'paymentHistoryChart');
+                    if (chart) {
+                        let data = [], labels = [];
+                        if (period === '6M') {
+                            data = [98, 102, 95, 105, 110, 103];
+                            labels = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        }
+                        if (period === '1Y') {
+                            data = [95, 88, 110, 105, 98, 120, 103, 99, 108, 112, 100, 102];
+                            labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        }
+                        if (period === 'ALL') {
+                            data = [85, 90, 92, 88, 95, 98, 95, 88, 110, 105, 98, 120, 103, 99, 108, 112, 100, 102];
+                            labels = ['Jul 24', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan 25', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        }
+                        chart.updateData(data, labels);
+                    }
+                }
+
+                function updateMonthlyComp(select) {
+                    const chart = window.chartInstances.find(c => c.canvas.id === 'monthlyCompChart');
+                    if (chart) {
+                        let data = [];
+                        if (select.value === 'thisYear') data = [95, 88, 110, 105, 98, 120, 103, 99, 108, 112, 100, 102];
+                        if (select.value === 'lastYear') data = [88, 82, 95, 98, 92, 105, 98, 95, 102, 105, 95, 98];
+                        chart.updateData(data);
+                    }
+                }
+            </script>
+            <footer class="footer" style="margin-top: auto;">
+                <div class="container">
+                    <div class="footer-content">
+                        <div>
+                            <h3 class="footer-title">AquaFlow Tech</h3>
+                            <p style="color: var(--text-secondary);">Professional plumbing services you can trust.
+                                Available
+                                <span dir="ltr">24/7</span> for all your plumbing needs.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="footer-title">Quick Links</h4>
+                            <ul class="footer-links">
+                                <li><a href="index.html">Home</a></li>
+                                <li><a href="about.html">About Us</a></li>
+                                <li><a href="services.html">Services</a></li>
+                                <li><a href="contact.html">Contact</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="footer-title">Services</h4>
+                            <ul class="footer-links">
+                                <li><a href="services.html">Emergency Plumbing</a></li>
+                                <li><a href="services.html">Drain Cleaning</a></li>
+                                <li><a href="services.html">Water Heaters</a></li>
+                                <li><a href="services.html">Pipe Repair</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="footer-title">Contact</h4>
+                            <ul class="footer-links">
+                                <li style="color: var(--text-secondary);"><i class="fas fa-phone"></i> (555) 123-4567
+                                </li>
+                                <li style="color: var(--text-secondary);"><i class="fas fa-envelope"></i>
+                                    info@plumberpro.com</li>
+                                <li style="color: var(--text-secondary);"><i class="fas fa-map-marker-alt"></i> 123 Main
+                                    St, City</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        <p>&copy; 2026 AquaFlow Tech. All rights reserved.</p>
+                        <div class="social-links">
+                            <a href="tel:5551234567" class="social-link" title="Call Us">
+                                <i class="fas fa-phone-alt"></i>
+                            </a>
+                            <a href="https://twitter.com" target="_blank" class="social-link" title="Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="https://instagram.com" target="_blank" class="social-link" title="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+
+
+    <script src="main.js"></script>
+    <script src="rtltoggle.js"></script>
+</body>
+
+</html>
