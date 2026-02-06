@@ -208,6 +208,9 @@ function initAnimations() {
         // Skip for Home 1 (handled by water fill)
         if (document.body.classList.contains('home-standard')) return;
 
+        // Skip chart cards to prevent Chart.js interference
+        if (el.classList.contains('chart-card') || el.closest('.chart-card')) return;
+
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
         el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
@@ -303,7 +306,7 @@ window.addEventListener('load', function () {
     if (!isHome1) {
         // Force "Home 2" effects (Pixel Reveal) on all other pages
         // Remove conflicting scroll animations first
-        const potentialCards = document.querySelectorAll('.card, .stats-card, .service-card, .feature-card, .pricing-card, .testimonial-card, .process-step, .home2-feature-card, .service-area-card, .dashboard-card');
+        const potentialCards = document.querySelectorAll('.card, .stats-card, .service-card, .feature-card, .pricing-card, .testimonial-card, .process-step, .home2-feature-card, .service-area-card, .dashboard-card, .chart-card');
         potentialCards.forEach(el => {
             el.classList.remove('fade-in-up', 'fade-in-left', 'fade-in-right', 'zoom-in', 'fade-in');
             el.style.opacity = ''; // Reset opacity
@@ -415,13 +418,15 @@ function initScrollAnimations() {
         // SPLIT LOGIC:
         // 1. If Home 1: Skip because Water Fill handles it.
         // 2. If NOT Home 1: Skip because Pixel Reveal handles it.
+        // 3. Chart cards: Skip to prevent Chart.js interference.
         // Conclusion: ALWAYS skip standard scroll animations for these card types.
         if (el.classList.contains('card') || el.classList.contains('stats-card') ||
             el.classList.contains('service-card') || el.classList.contains('feature-card') ||
             el.classList.contains('testimonial-card') || el.classList.contains('process-step') ||
             el.classList.contains('operations-card') || el.classList.contains('metric-card') ||
             el.classList.contains('home2-feature-card') || el.classList.contains('service-area-card') ||
-            el.classList.contains('pricing-card')) {
+            el.classList.contains('pricing-card') || el.classList.contains('dashboard-card') ||
+            el.classList.contains('chart-card') || el.closest('.chart-card')) {
             return;
         }
 
@@ -913,9 +918,15 @@ function initHeroParticles() {
 
 // 3D Card Flip Animation
 function init3DCardAnimations() {
-    const cards3D = document.querySelectorAll('.card, .operations-card');
+    // Exclude dashboard cards from 3D tilt effect
+    const cards3D = document.querySelectorAll('.card:not(.dashboard-container .card):not(.dashboard-sidebar .card):not(.dashboard-main .card):not(.dashboard-card), .operations-card:not(.dashboard-container .operations-card)');
 
     cards3D.forEach(card => {
+        // Skip if card is inside dashboard
+        if (card.closest('.dashboard-container') || card.closest('.dashboard-sidebar') || card.closest('.dashboard-main')) {
+            return;
+        }
+
         card.style.transition = 'transform 0.3s ease';
         card.style.transformStyle = 'preserve-3d';
 
@@ -927,10 +938,11 @@ function init3DCardAnimations() {
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
 
-            const rotateX = (y - centerY) / 10;
-            const rotateY = (centerX - x) / 10;
+            // Reduced tilt effect: changed from /10 to /25 for gentler movement
+            const rotateX = (y - centerY) / 25;
+            const rotateY = (centerX - x) / 25;
 
-            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
         });
 
         card.addEventListener('mouseleave', function () {
@@ -945,10 +957,11 @@ function init3DCardAnimations() {
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
 
-            const rotateX = (y - centerY) / 10;
-            const rotateY = (centerX - x) / 10;
+            // Reduced tilt effect: changed from /10 to /25 for gentler movement
+            const rotateX = (y - centerY) / 25;
+            const rotateY = (centerX - x) / 25;
 
-            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
         });
     });
 }
@@ -1453,7 +1466,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // new HeroAnimation();
 });
 // Interactive Charts Library (No external dependencies)
-class Chart {
+class CustomChart {
     constructor(canvasId, options = {}) {
         this.canvas = document.getElementById(canvasId);
         if (!this.canvas) return;
@@ -1738,11 +1751,17 @@ class Chart {
                 this.ctx.arc(x, y, 5, 0, Math.PI * 2);
                 this.ctx.fill();
 
-                // Labels
-                this.ctx.fillStyle = textColor;
-                this.ctx.font = '12px sans-serif';
-                this.ctx.textAlign = 'center';
-                this.ctx.fillText(labels[index] || '', x, height - 5);
+                // Labels - Prevent collision on small screens
+                const tickSpacing = chartWidth / (data.length - 1);
+                const minLabelWidth = 45; // Minimum space required for label
+                const step = Math.ceil(minLabelWidth / tickSpacing);
+
+                if (index % step === 0) {
+                    this.ctx.fillStyle = textColor;
+                    this.ctx.font = '12px sans-serif';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText(labels[index] || '', x, height - 5);
+                }
             });
             this.ctx.globalAlpha = 1;
         }
@@ -1997,7 +2016,7 @@ window.chartInstances = [];
 document.addEventListener('DOMContentLoaded', function () {
     const createChart = (id, options) => {
         if (document.getElementById(id)) {
-            const chart = new Chart(id, options);
+            const chart = new CustomChart(id, options);
             window.chartInstances.push(chart);
             return chart;
         }
@@ -2650,6 +2669,9 @@ function initCardPixelReveal() {
 
     targetCards.forEach(card => {
         if (card.querySelector('.pixel-mask-grid')) return;
+
+        // Skip chart cards to prevent Chart.js canvas interference
+        if (card.classList.contains('chart-card') || card.closest('.chart-card')) return;
 
         // STRICT CLEAR: Remove all conflicting animations/opacities
         card.style.opacity = '1';

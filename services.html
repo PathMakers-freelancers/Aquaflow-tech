@@ -101,6 +101,31 @@
             margin-left: auto;
             margin-right: auto;
         }
+
+        .horizontal-card {
+            display: flex;
+            align-items: stretch;
+            overflow: hidden;
+            gap: 0;
+        }
+
+        .horizontal-card .card-image {
+            width: 40%;
+            min-height: 250px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .horizontal-card {
+                flex-direction: column;
+            }
+
+            .horizontal-card .card-image {
+                width: 100%;
+                height: 200px;
+                min-height: auto;
+            }
+        }
     </style>
 </head>
 
@@ -199,93 +224,110 @@
             <div class="grid grid-3" style="margin-bottom: 4rem;">
                 <div class="card fade-in-up stagger-1 hover-lift">
                     <div class="image-zoom-container"
-                        style="width: 100%; height: 220px; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem;">
+                        style="width: 100%; height: 220px; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; overflow: hidden;">
                         <img src="assets/images/Fixture%20Installation.jpg" alt="Fixture Installation"
                             style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" class="fade-in-scale">
                     </div>
-                    <div class="card-icon">
-                        <i class="fas fa-faucet"></i>
+                    <div class="card-content" style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
+                        <div class="card-icon" style="margin-bottom: 1rem;">
+                            <i class="fas fa-faucet"></i>
+                        </div>
+                        <h3 class="card-title">Fixture Installation & Repair</h3>
+                        <p class="card-text">Expert installation and repair of all bathroom and kitchen fixtures
+                            including
+                            faucets, sinks, toilets, showers, and tubs.</p>
+                        <button class="btn btn-outline" style="margin-top: auto; width: 100%;">Learn More</button>
                     </div>
-                    <h3 class="card-title">Fixture Installation & Repair</h3>
-                    <p class="card-text">Expert installation and repair of all bathroom and kitchen fixtures including
-                        faucets, sinks, toilets, showers, and tubs.</p>
-                    <button class="btn btn-outline" style="margin-top: 1rem; width: 100%;">Learn More</button>
                 </div>
 
                 <div class="card fade-in-up">
                     <div class="image-zoom-container"
-                        style="width: 100%; height: 220px; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem;">
+                        style="width: 100%; height: 220px; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; overflow: hidden;">
                         <img src="assets/images/Pipe%20System%20and%20Repair.jpg" alt="Pipe Services"
                             style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" class="fade-in-scale">
                     </div>
-                    <div class="card-icon">
-                        <i class="fas fa-wrench"></i>
+                    <div class="card-content" style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
+                        <div class="card-icon" style="margin-bottom: 1rem;">
+                            <i class="fas fa-wrench"></i>
+                        </div>
+                        <h3 class="card-title">Pipe Services</h3>
+                        <p class="card-text">Complete pipe repair, replacement, and repiping services for residential
+                            and
+                            commercial properties. Expert solutions for all your piping needs.</p>
+                        <button class="btn btn-outline" style="margin-top: auto; width: 100%;">Learn More</button>
                     </div>
-                    <h3 class="card-title">Pipe Services</h3>
-                    <p class="card-text">Complete pipe repair, replacement, and repiping services for residential and
-                        commercial properties. Expert solutions for all your piping needs.</p>
-                    <button class="btn btn-outline" style="margin-top: 1rem; width: 100%;">Learn More</button>
                 </div>
 
                 <div class="card fade-in-up">
                     <div
-                        style="width: 100%; height: 220px; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem;">
+                        style="width: 100%; height: 220px; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; overflow: hidden;">
                         <img src="assets/images/Drain%20Cleaning%20Service.jpg" alt="Drain Cleaning"
                             style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" class="fade-in-scale">
                     </div>
-                    <div class="card-icon">
-                        <i class="fas fa-water"></i>
+                    <div class="card-content" style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
+                        <div class="card-icon" style="margin-bottom: 1rem;">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <h3 class="card-title">Drain Cleaning</h3>
+                        <p class="card-text">Professional drain cleaning and clog removal using advanced equipment for
+                            fast,
+                            effective results.</p>
+                        <button class="btn btn-outline" style="margin-top: auto; width: 100%;">Learn More</button>
                     </div>
-                    <h3 class="card-title">Drain Cleaning</h3>
-                    <p class="card-text">Professional drain cleaning and clog removal using advanced equipment for fast,
-                        effective results.</p>
-                    <button class="btn btn-outline" style="margin-top: 1rem; width: 100%;">Learn More</button>
                 </div>
 
                 <div class="card fade-in-up">
                     <div
-                        style="width: 100%; height: 220px; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem;">
+                        style="width: 100%; height: 220px; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; overflow: hidden;">
                         <img src="assets/images/Water%20Heater%20Service.jpg" alt="Water Heater"
                             style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" class="fade-in-scale">
                     </div>
-                    <div class="card-icon">
-                        <i class="fas fa-fire"></i>
+                    <div class="card-content" style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
+                        <div class="card-icon" style="margin-bottom: 1rem;">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <h3 class="card-title">Water Heater Services</h3>
+                        <p class="card-text">Installation, repair, and maintenance of all types of water heaters
+                            including
+                            tankless and traditional models.</p>
+                        <button class="btn btn-outline" style="margin-top: auto; width: 100%;">Learn More</button>
                     </div>
-                    <h3 class="card-title">Water Heater Services</h3>
-                    <p class="card-text">Installation, repair, and maintenance of all types of water heaters including
-                        tankless and traditional models.</p>
-                    <button class="btn btn-outline" style="margin-top: 1rem; width: 100%;">Learn More</button>
                 </div>
 
                 <div class="card fade-in-up">
                     <div
-                        style="width: 100%; height: 220px; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem;">
+                        style="width: 100%; height: 220px; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; overflow: hidden;">
                         <img src="assets/images/24_7%20Emergency%20Service.png" alt="Emergency Service"
                             style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" class="fade-in-scale">
                     </div>
-                    <div class="card-icon">
-                        <i class="fas fa-exclamation-circle"></i>
+                    <div class="card-content" style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
+                        <div class="card-icon" style="margin-bottom: 1rem;">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <h3 class="card-title">Emergency Plumbing</h3>
+                        <p class="card-text"><span dir="ltr">24/7</span> emergency plumbing services for burst pipes,
+                            major
+                            leaks, and urgent
+                            plumbing issues.</p>
+                        <button class="btn btn-outline" style="margin-top: auto; width: 100%;">Learn More</button>
                     </div>
-                    <h3 class="card-title">Emergency Plumbing</h3>
-                    <p class="card-text"><span dir="ltr">24/7</span> emergency plumbing services for burst pipes, major
-                        leaks, and urgent
-                        plumbing issues.</p>
-                    <button class="btn btn-outline" style="margin-top: 1rem; width: 100%;">Learn More</button>
                 </div>
 
                 <div class="card fade-in-up">
                     <div
-                        style="width: 100%; height: 220px; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem;">
+                        style="width: 100%; height: 220px; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; overflow: hidden;">
                         <img src="assets/images/Repair%20Services%20Scene.jpg" alt="Commercial Plumbing"
                             style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" class="fade-in-scale">
                     </div>
-                    <div class="card-icon">
-                        <i class="fas fa-building"></i>
+                    <div class="card-content" style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
+                        <div class="card-icon" style="margin-bottom: 1rem;">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3 class="card-title">Commercial Plumbing</h3>
+                        <p class="card-text">Comprehensive plumbing services for businesses, offices, and commercial
+                            properties of all sizes.</p>
+                        <button class="btn btn-outline" style="margin-top: auto; width: 100%;">Learn More</button>
                     </div>
-                    <h3 class="card-title">Commercial Plumbing</h3>
-                    <p class="card-text">Comprehensive plumbing services for businesses, offices, and commercial
-                        properties of all sizes.</p>
-                    <button class="btn btn-outline" style="margin-top: 1rem; width: 100%;">Learn More</button>
                 </div>
             </div>
         </div>
@@ -298,120 +340,112 @@
                 <p class="section-subtitle">Everything you need to know about our services</p>
             </div>
             <div class="grid grid-2">
-                <div class="card fade-in-up">
-                    <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem;">
-                        <div
-                            style="width: 120px; height: 120px; border-radius: 0.75rem; overflow: hidden; flex-shrink: 0;">
-                            <img src="assets/images/Installation%20Services%20Scene.png" alt="Bathroom Services"
-                                style="width: 100%; height: 100%; object-fit: cover;" loading="lazy"
-                                class="fade-in-left">
-                        </div>
-                        <div>
-                            <h3 class="card-title">Bathroom Remodeling</h3>
-                            <p class="card-text">Complete bathroom plumbing upgrades and installations.</p>
-                        </div>
+                <div class="card fade-in-up horizontal-card">
+                    <div class="card-image">
+                        <img src="assets/images/Installation%20Services%20Scene.png" alt="Bathroom Services"
+                            style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" class="fade-in-left">
                     </div>
-                    <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li
-                            style="padding: 0.5rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-check" style="color: var(--success);"></i> Bathtub installation
-                        </li>
-                        <li
-                            style="padding: 0.5rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-check" style="color: var(--success);"></i> Shower systems
-                        </li>
-                        <li
-                            style="padding: 0.5rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-check" style="color: var(--success);"></i> Vanity & sink setup
-                        </li>
-                    </ul>
+                    <div class="card-content"
+                        style="flex: 1; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center;">
+                        <h3 class="card-title" style="margin-bottom: 0.5rem;">Bathroom Remodeling</h3>
+                        <p class="card-text" style="font-size: 0.95rem; margin-bottom: 1rem;">Complete bathroom
+                            plumbing upgrades and installations.</p>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li
+                                style="padding: 0.25rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success);"></i> Bathtub installation
+                            </li>
+                            <li
+                                style="padding: 0.25rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success);"></i> Shower systems
+                            </li>
+                            <li
+                                style="padding: 0.25rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success);"></i> Vanity & sink setup
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="card fade-in-up">
-                    <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem;">
-                        <div
-                            style="width: 120px; height: 120px; border-radius: 0.75rem; overflow: hidden; flex-shrink: 0;">
-                            <img src="assets/images/Maintenance%20Services%20Scene.jpg" alt="Kitchen Services"
-                                style="width: 100%; height: 100%; object-fit: cover;" loading="lazy"
-                                class="fade-in-left">
-                        </div>
-                        <div>
-                            <h3 class="card-title">Kitchen Plumbing</h3>
-                            <p class="card-text">Expert kitchen fixture installation and repairs.</p>
-                        </div>
+                <div class="card fade-in-up horizontal-card">
+                    <div class="card-image">
+                        <img src="assets/images/Maintenance%20Services%20Scene.jpg" alt="Kitchen Services"
+                            style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" class="fade-in-left">
                     </div>
-                    <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li
-                            style="padding: 0.5rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-check" style="color: var(--success);"></i> Sink & faucet installation
-                        </li>
-                        <li
-                            style="padding: 0.5rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-check" style="color: var(--success);"></i> Garbage disposal
-                        </li>
-                        <li
-                            style="padding: 0.5rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-check" style="color: var(--success);"></i> Dishwasher hookup
-                        </li>
-                    </ul>
+                    <div class="card-content"
+                        style="flex: 1; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center;">
+                        <h3 class="card-title" style="margin-bottom: 0.5rem;">Kitchen Plumbing</h3>
+                        <p class="card-text" style="font-size: 0.95rem; margin-bottom: 1rem;">Expert kitchen fixture
+                            installation and repairs.</p>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li
+                                style="padding: 0.25rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success);"></i> Sink & faucet installation
+                            </li>
+                            <li
+                                style="padding: 0.25rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success);"></i> Garbage disposal
+                            </li>
+                            <li
+                                style="padding: 0.25rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success);"></i> Dishwasher hookup
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="card fade-in-up">
-                    <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem;">
-                        <div
-                            style="width: 120px; height: 120px; border-radius: 0.75rem; overflow: hidden; flex-shrink: 0;">
-                            <img src="assets/images/Drain%20Cleaning%20Service.jpg" alt="Sewer Services"
-                                style="width: 100%; height: 100%; object-fit: cover;" loading="lazy"
-                                class="fade-in-left">
-                        </div>
-                        <div>
-                            <h3 class="card-title">Sewer Line Services</h3>
-                            <p class="card-text">Professional sewer line repair and replacement.</p>
-                        </div>
+                <div class="card fade-in-up horizontal-card">
+                    <div class="card-image">
+                        <img src="assets/images/Drain%20Cleaning%20Service.jpg" alt="Sewer Services"
+                            style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" class="fade-in-left">
                     </div>
-                    <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li
-                            style="padding: 0.5rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-check" style="color: var(--success);"></i> Camera inspection
-                        </li>
-                        <li
-                            style="padding: 0.5rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-check" style="color: var(--success);"></i> Trenchless repair
-                        </li>
-                        <li
-                            style="padding: 0.5rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-check" style="color: var(--success);"></i> Complete replacement
-                        </li>
-                    </ul>
+                    <div class="card-content"
+                        style="flex: 1; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center;">
+                        <h3 class="card-title" style="margin-bottom: 0.5rem;">Sewer Line Services</h3>
+                        <p class="card-text" style="font-size: 0.95rem; margin-bottom: 1rem;">Professional sewer line
+                            repair and replacement.</p>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li
+                                style="padding: 0.25rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success);"></i> Camera inspection
+                            </li>
+                            <li
+                                style="padding: 0.25rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success);"></i> Trenchless repair
+                            </li>
+                            <li
+                                style="padding: 0.25rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success);"></i> Complete replacement
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="card fade-in-up">
-                    <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem;">
-                        <div
-                            style="width: 120px; height: 120px; border-radius: 0.75rem; overflow: hidden; flex-shrink: 0;">
-                            <img src="assets/images/Plumber%20Fixing%20Pipe%20Close-up.png" alt="Gas Line"
-                                style="width: 100%; height: 100%; object-fit: cover;" loading="lazy"
-                                class="fade-in-left">
-                        </div>
-                        <div>
-                            <h3 class="card-title">Gas Line Services</h3>
-                            <p class="card-text">Safe gas line installation and leak detection.</p>
-                        </div>
+                <div class="card fade-in-up horizontal-card">
+                    <div class="card-image">
+                        <img src="assets/images/Plumber%20Fixing%20Pipe%20Close-up.png" alt="Gas Line"
+                            style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" class="fade-in-left">
                     </div>
-                    <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li
-                            style="padding: 0.5rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-check" style="color: var(--success);"></i> New installations
-                        </li>
-                        <li
-                            style="padding: 0.5rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-check" style="color: var(--success);"></i> Leak detection & repair
-                        </li>
-                        <li
-                            style="padding: 0.5rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-check" style="color: var(--success);"></i> Safety inspections
-                        </li>
-                    </ul>
+                    <div class="card-content"
+                        style="flex: 1; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center;">
+                        <h3 class="card-title" style="margin-bottom: 0.5rem;">Gas Line Services</h3>
+                        <p class="card-text" style="font-size: 0.95rem; margin-bottom: 1rem;">Safe gas line
+                            installation and leak detection.</p>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li
+                                style="padding: 0.25rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success);"></i> New installations
+                            </li>
+                            <li
+                                style="padding: 0.25rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success);"></i> Leak detection & repair
+                            </li>
+                            <li
+                                style="padding: 0.25rem 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check" style="color: var(--success);"></i> Safety inspections
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -424,7 +458,7 @@
                 <p class="section-subtitle">Transparent pricing for all our services</p>
             </div>
             <div class="grid grid-3">
-                <div class="card pricing-card basic-plan scroll-reveal" style="text-align: center;">
+                <div class="card pricing-card basic-plan fade-in-up stagger-1" style="text-align: center;">
                     <div
                         style="width: 70px; height: 70px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #CD7F32, #B87333); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(205, 127, 50, 0.4);">
                         <i class="fas fa-calendar-check" style="font-size: 2rem; color: white;"></i>
@@ -465,7 +499,7 @@
                     <button class="btn btn-outline" style="width: 100%;">Choose Plan</button>
                 </div>
 
-                <div class="card pricing-card premium-plan scroll-reveal" style="text-align: center;">
+                <div class="card pricing-card premium-plan fade-in-up stagger-2" style="text-align: center;">
                     <div class="most-popular-badge">MOST POPULAR</div>
                     <div
                         style="width: 70px; height: 70px; margin: 2rem auto 1.5rem; background: linear-gradient(135deg, #C0C0C0, #A9A9A9); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(192, 192, 192, 0.4);">
@@ -514,7 +548,7 @@
                     <button class="btn btn-outline" style="width: 100%;">Choose Plan</button>
                 </div>
 
-                <div class="card pricing-card enterprise-plan scroll-reveal" style="text-align: center;">
+                <div class="card pricing-card enterprise-plan fade-in-up stagger-3" style="text-align: center;">
                     <div
                         style="width: 70px; height: 70px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #FFD700, #FFA500); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(255, 215, 0, 0.5);">
                         <i class="fas fa-crown" style="font-size: 2rem; color: white;"></i>
@@ -750,7 +784,7 @@
                 <div class="card process-step-card fade-in-up stagger-1 hover-lift"
                     style="text-align: center; position: relative; padding: 0; overflow: hidden;">
                     <img src="assets/images/Plumber%20Consulting%20on%20Tablet.jpg" alt="Initial Contact"
-                        style="width: 100%; height: 150px; object-fit: cover;">
+                        style="width: 100%; height: 150px; object-fit: cover; object-position: top center;">
                     <div style="padding: 1.5rem; padding-top: 2rem;">
                         <div class="step-number"
                             style="background: linear-gradient(135deg, var(--primary), var(--accent));">
@@ -784,8 +818,7 @@
                     <img src="assets/images/Plumber%20Fixing%20Pipe%20Close-up.png" alt="Repair"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 1.5rem; padding-top: 2rem;">
-                        <div class="step-number"
-                            style="background: linear-gradient(135deg, var(--success), var(--cyan));">
+                        <div class="step-number" style="background: linear-gradient(135deg, var(--success), #06b6d4);">
                             3</div>
                         <div style="margin-top: 1rem;">
                             <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem;">Professional Repair</h3>
@@ -800,10 +833,9 @@
                 <div class="card process-step-card fade-in-up stagger-4 hover-lift"
                     style="text-align: center; position: relative; padding: 0; overflow: hidden;">
                     <img src="assets/images/Quality%20Service%20Showcase.jpg" alt="Quality Assurance"
-                        style="width: 100%; height: 150px; object-fit: cover;">
+                        style="width: 100%; height: 150px; object-fit: cover; object-position: top center;">
                     <div style="padding: 1.5rem; padding-top: 2rem;">
-                        <div class="step-number"
-                            style="background: linear-gradient(135deg, var(--pink), var(--warning));">
+                        <div class="step-number" style="background: linear-gradient(135deg, #ec4899, var(--warning));">
                             4</div>
                         <div style="margin-top: 1rem;">
                             <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem;">Quality Assurance</h3>
@@ -1176,7 +1208,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 AquaFlow Tech. All rights reserved.</p>
+                <p>&copy; 2026 Pathmakers. All rights reserved.</p>
                 <div class="social-links">
                     <a href="tel:5551234567" class="social-link" title="Call Us">
                         <i class="fas fa-phone-alt"></i>

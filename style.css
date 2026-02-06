@@ -1204,17 +1204,18 @@ body[dir="rtl"] .dropdown-menu {
 
 /* Base stats card styles handled above */
 
+/* Footer - Always Dark Theme for Consistency */
 .footer {
-  background: #fffbeb;
-  /* Cream/Amber-50 */
-  border-top: 1px solid #fcd34d;
-  /* Amber-300 */
+  background: #0f172a;
+  /* Slate 900 - Dark background */
+  border-top: 1px solid #1e293b;
+  /* Slate 800 */
   padding: 4rem 0 2rem;
   margin-top: 5rem;
   width: 100% !important;
   max-width: 100vw !important;
-  color: #451a03;
-  /* Deep Brown */
+  color: #f8fafc;
+  /* Light text for dark background */
 }
 
 .footer .container {
@@ -1223,20 +1224,11 @@ body[dir="rtl"] .dropdown-menu {
   margin: 0 auto;
 }
 
+/* Dark theme footer - same as base (already dark) */
 [data-theme="dark"] .footer {
-  background: #164e63;
-  /* Dark Cyan/Teal for night mode equivalence if needed, or keep cream? User said "footer for all pages" and showed cream. Usually a light footer looks bad in dark mode. I will assume "all pages" means the STRUCTURE and DESIGN, but colors should probably respect the theme? 
-  The user explicitly said "this should be footer for all pages" showing the image. 
-  "For home 2 there should be different theme for day and night".
-  I will stick to the requested colors for the default (Day/Earth) theme. 
-  For Dark theme, I'll adapt it to match the dark palette but keep the layout. 
-  However, if the user insists on "THIS footer", I might need to clarify. 
-  Given "Home 2 differnt theme day/night", implies the footer might need to change too.
-  I will map the cream colors to the variables I already have: var(--bg-primary) which is cream.
-  */
-  background: var(--bg-primary);
-  border-color: var(--border-color);
-  /* Use variables so it works in both themes */
+  background: #0f172a;
+  border-color: #1e293b;
+  color: #f8fafc;
 }
 
 .footer-content {
@@ -1245,15 +1237,22 @@ body[dir="rtl"] .dropdown-menu {
   gap: 3rem;
   margin-bottom: 3rem;
   text-align: left;
-  /* Ensure left alignment as per image */
+}
+
+/* Force footer paragraph text (description) to be light in all themes */
+.footer-content p {
+  color: #cbd5e1 !important;
+  /* Slate 300 */
+  margin-top: 0.5rem;
+  line-height: 1.6;
 }
 
 .footer-title {
   font-size: 1.125rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  color: var(--primary);
-  /* Teal in Day, Cyan in Night */
+  color: #22d3ee;
+  /* Cyan 400 - always visible on dark */
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -1264,10 +1263,17 @@ body[dir="rtl"] .dropdown-menu {
 
 .footer-links li {
   margin-bottom: 0.75rem;
+  color: #cbd5e1;
+  /* Slate 300 - light text on dark bg */
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .footer-links a {
-  color: var(--text-primary);
+  color: #cbd5e1;
+  /* Slate 300 */
   transition: all 0.2s;
   text-decoration: none;
   font-size: 0.95rem;
@@ -1277,19 +1283,25 @@ body[dir="rtl"] .dropdown-menu {
 }
 
 .footer-links a:hover {
-  color: var(--primary);
+  color: #22d3ee;
+  /* Cyan 400 on hover */
   transform: translateX(3px);
 }
 
 .footer-links i {
-  color: var(--text-secondary);
+  color: #22d3ee;
+  /* Cyan 400 - bright icons */
+  width: 18px;
+  text-align: center;
 }
 
 .footer-bottom {
   text-align: center;
   padding-top: 2rem;
-  border-top: 1px solid var(--border-color);
-  color: var(--text-secondary);
+  border-top: 1px solid #334155;
+  /* Slate 700 */
+  color: #94a3b8;
+  /* Slate 400 */
   font-size: 0.9rem;
   display: flex;
   flex-direction: column;
@@ -1299,6 +1311,20 @@ body[dir="rtl"] .dropdown-menu {
 
 .footer .social-links {
   margin-top: 0.5rem;
+}
+
+.footer .social-link {
+  background: #1e293b;
+  /* Slate 800 */
+  color: #f8fafc;
+  border: 1px solid #334155;
+  /* Slate 700 */
+}
+
+.footer .social-link:hover {
+  background: #22d3ee;
+  color: #0f172a;
+  border-color: #22d3ee;
 }
 
 .form-group {
@@ -2160,7 +2186,7 @@ textarea.form-control {
   /* Charts responsive */
   canvas {
     max-width: 100% !important;
-    height: auto !important;
+    /* height: auto !important; - REMOVED to fix Chart.js collapse */
     min-height: 200px;
   }
 
@@ -4983,7 +5009,7 @@ img.loaded {
   .dashboard-card canvas {
     max-width: 100% !important;
     width: 100% !important;
-    height: auto !important;
+    /* height: auto !important; - REMOVED to fix Chart.js collapse */
     min-height: 250px !important;
   }
 
@@ -5470,9 +5496,12 @@ img.loaded {
   }
 }
 
-/* Hide Brand Text in Dark Mode (Restored) */
+/* Brand Text - Visible in all themes */
 [data-theme='dark'] .brand-text {
-  display: none;
+  display: inline;
+  /* Ensure visibility in dark mode */
+  color: var(--text-primary);
+  /* Use theme-appropriate text color */
 }
 
 /* AQUAFLOW PROFESSIONAL LOADER */
@@ -6051,22 +6080,18 @@ img.loaded {
   color: #94a3b8 !important;
 }
 
-/* Footer Brand Standardization */
+
+
+/* Footer Brand Standardization - Always Dark */
 .footer-title {
   font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--primary), var(--text-primary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-[data-theme="dark"] .footer-title {
+  color: #22d3ee;
+  /* Cyan 400 - consistent on dark footer */
   background: none;
   -webkit-text-fill-color: initial;
-  color: var(--text-primary);
 }
 
 /* Testimonial Card Alignment Fix */
@@ -6145,4 +6170,99 @@ img.loaded {
 /* Ensure footer sticks to bottom in cards with Content + Footer structure */
 .grid-2 .card>div:first-child:nth-last-child(2) {
   flex: 1;
+}
+
+/* =========================================
+   Chart.js Chart Card Styles
+   Ensures proper rendering of dashboard charts
+   ========================================= */
+
+/* Chart Card Container */
+.chart-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* Ensure visibility */
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative;
+  /* CRITICAL: Allow chart content to render properly */
+  overflow: visible;
+}
+
+.chart-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .chart-card {
+  background: var(--bg-secondary);
+}
+
+/* Chart Container - Let Chart.js control canvas sizing */
+.chart-container {
+  position: relative;
+  height: 250px;
+  min-height: 250px;
+  width: 100%;
+}
+
+/* Canvas crisp rendering - Fix blurry charts */
+.chart-container canvas {
+  /* Ensure crisp pixel rendering */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  /* Prevent any blur filters */
+  filter: none !important;
+  -webkit-filter: none !important;
+  /* Ensure no transform blur */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Chart Card Title */
+.chart-card h3 {
+  margin-bottom: 1rem;
+  text-align: center;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Responsive adjustments for charts */
+@media (max-width: 768px) {
+  .chart-card {
+    padding: 1rem;
+  }
+
+  .chart-container {
+    height: 200px;
+    min-height: 200px;
+  }
+}
+
+/* Chart Grid Layout */
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 640px) {
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Prevent pixel reveal from affecting charts */
+.chart-card .pixel-mask-grid {
+  display: none !important;
 }
